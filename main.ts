@@ -31,7 +31,7 @@ namespace restaurants_on_map {
     }
 
     function  getRestaurants(): Promise<{[key: string]: any}> {
-        return fetch('/data2.json')
+        return fetch('./data2.json')
         .then(function(response) {
           return response.json();
         })
