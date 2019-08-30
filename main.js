@@ -28,7 +28,7 @@ var restaurants_on_map;
         });
     }
     function getRestaurants() {
-        return fetch('./data2.json')
+        return fetch('data2.json')
             .then(function (response) {
             return response.json();
         });
