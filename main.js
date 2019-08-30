@@ -1,8 +1,5 @@
 var restaurants_on_map;
 (function (restaurants_on_map) {
-    var map;
-    var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    var labelIndex = 0;
     function init(position) {
         var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 13);
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -23,7 +20,8 @@ var restaurants_on_map;
             return;
         }
         var marker = L.marker([+restaurant.location.lat, +restaurant.location.lng]).addTo(map);
-        marker.bindPopup('<p>' + restaurant.title + '</p><br><a href="' + restaurant.website + '">Ruokalista</a>');
+        var content = restaurant.website ? '<p>' + restaurant.title + '</p><br><a href="' + restaurant.website + '">Ruokalista</a>' : '<p>' + restaurant.title + '</p>';
+        marker.bindPopup(content);
     }
     function getRestaurants() {
         return fetch('dataAll.json')

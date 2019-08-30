@@ -1,8 +1,18 @@
 namespace restaurants_on_map {
-    let map;
-    let labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let labelIndex = 0;
-    
+    interface Restaurant {
+        title: string,
+        address: string,
+        location: {
+            lat: string,
+            lng: string,
+        }
+        website: string,
+
+
+    }
+
+    declare const L: any;
+
     function init(position: Position): void {
 
         let map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 13);
@@ -21,15 +31,16 @@ namespace restaurants_on_map {
         });
     }
 
-    function addMarker(restaurant, map) {
+    function addMarker(restaurant: Restaurant, map: any) {
         if(!restaurant.location) {
             return;
         }
         let marker = L.marker([+restaurant.location.lat, +restaurant.location.lng]).addTo(map);
-        marker.bindPopup('<p>' + restaurant.title + '</p><br><a href="' + restaurant.website + '">Ruokalista</a>');
+        let content = restaurant.website ? '<p>' + restaurant.title + '</p><br><a href="' + restaurant.website + '">Ruokalista</a>' : '<p>' + restaurant.title + '</p>';
+        marker.bindPopup(content);
     }
 
-    function  getRestaurants(): Promise<{[key: string]: any}> {
+    function getRestaurants(): Promise<Restaurant[]> {
         return fetch('dataAll.json')
         .then(function(response) {
           return response.json();
