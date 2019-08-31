@@ -48,7 +48,8 @@ export default class Map extends Vue {
   private zoom = 3;
   private center = [0, 0];
   private bounds = null;
-  private map: LMap|null = null;
+  //@ts-ignore
+  private map: LMap;
   private showParagraph = false;
 
   @Prop() restaurants: Restaurant[] = [];

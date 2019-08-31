@@ -26,7 +26,8 @@ import Popup from './Popup.vue';
 })
 export default class RestaurantMarker extends Vue {
 
-    @Prop() restaurant: Restaurant | null = null;
+    //@ts-ignore
+    @Prop() restaurant: Restaurant;
     private loadMenu = false;
 
     mounted(): void {

@@ -36,7 +36,8 @@ import { Restaurant } from '../Restaurant';
 })
 export default class Popup extends Vue {
 
-    @Prop() restaurant: Restaurant | null = null;
+    //@ts-ignore
+    @Prop() restaurant: Restaurant;
     @Prop() loadMenu: boolean = false;
     private lunchMenu: {[key: string]: any} = {};
     private lunchTime = "";
