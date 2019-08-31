@@ -52,17 +52,39 @@ def getAreaUrls():
 
 
 def saveRestaurantsToFile(restaurants):
-    with open('dataAll.json', 'w') as outfile:
+    with open('restaurants.json', 'w') as outfile:
         json.dump(restaurants, outfile)
 
-restaurants = []
-areaUrls = getAreaUrls()
-print(areaUrls)
-for areaUrl in areaUrls:
-    cityUrls = getCityUrlsForArea(areaUrl)
-    print(cityUrls)
-    for cityUrl in cityUrls:
-        print(cityUrl)
-        restaurants = restaurants + getRestaurantsForCity(cityUrl)
+def getRestaurants():
+    restaurants = []
+    areaUrls = getAreaUrls()
+    for areaUrl in areaUrls:
+        cityUrls = getCityUrlsForArea(areaUrl)
+        for cityUrl in cityUrls:
+            restaurants = restaurants + getRestaurantsForCity(cityUrl)
 
-saveRestaurantsToFile(restaurants)
+    saveRestaurantsToFile(restaurants)
+
+def getLunchListsForRestaurants():
+    with open('dataAll.json', 'r') as json_file:
+        restaurants = json.load(json_file)
+
+    for index in range(len(restaurants)):
+        if (restaurants[index]["website"] == ""):
+            continue
+        
+        if ("www.fazerfoodco.fi" in restaurants[index]["website"] or "www.amica.fi" in restaurants[index]["website"]):
+            parsed_html = BeautifulSoup(getUrlContents(restaurants[index]["website"]), "lxml")
+            menuItems = parsed_html.find_all("div", {"class": "menu-action-popup-content-item"})
+            if (len(menuItems) < 1):
+                continue
+            try:
+                luch_url = menuItems[2].find("a")["href"]
+                restaurants[index]["lunchUrl"] = "https://www.fazerfoodco.fi" + luch_url
+            except:
+                restaurants[index]["lunchUrl"] = None
+                print("No luch url found")
+
+    saveRestaurantsToFile(restaurants)    
+
+getLunchListsForRestaurants()
