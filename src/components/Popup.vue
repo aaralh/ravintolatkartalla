@@ -2,15 +2,22 @@
   <div class="popup">
       <div class="popup__label">{{ title }}</div>
       <div class="popup__label">Osoite: {{ restaurant.address }}</div>
-      <div class="popup__label">Lounasaika: {{ lunchTime }}</div>
-      <div class="popup__menu">
-          <div class="popup__menu__item" v-for="item in lunchMenu.SetMenus" :key="item.Name">
+      <div v-if="hasTime" class="popup__label">Lounasaika: {{ lunchTime }}</div>
+      <div v-else class="popup__label">Lounasaika: Ei lounasaikaa saatavilla</div>
+      <div v-if="hasMenu" class="popup__menu">
+          <div class="popup__menu__item" v-for="item in lunchMenu" :key="item.Name">
               <div class="popup__menu__item__title">{{ item.Name }}</div>
               <div class="popup__menu__item__ingredients">
                   <div class="popup__menu__item__ingredients__item" v-for="ingredient in item.Components" :key="ingredient">{{ ingredient }}</div>
               </div>
               <div class="popup__menu__item__price">{{ item.Price }}</div>
           </div>
+      </div>
+      <div v-else>
+          <div class="popup__label">Ei ruokalistaa saatavilla</div>
+      </div>
+      <div v-if="isLoading" class="popup__loading">
+          <i class="fa fa-spinner fa-spin"></i>
       </div>
   </div>
 </template>
@@ -31,6 +38,7 @@ interface FoodMenu {
             if (!oldVal && newVal) {
                if (this.restaurant!.lunchUrl) {
                     this.fetchLuchMenu(this.restaurant!.lunchUrl).then(menu => {
+                        this.isLoading = false;
                         switch(this.restaurant.type) {
                             case "fazer":
                                 this.parseFazer(menu);
@@ -40,6 +48,9 @@ interface FoodMenu {
                                 break;
                         }
                     });
+                } else {
+                    this.hasMenu = false;
+                    this.hasTime = false;
                 }
             }
         }
@@ -54,6 +65,9 @@ export default class Popup extends Vue {
     private lunchMenu: FoodMenu[] = [];
     private lunchTime = "";
     private title = this.restaurant!.title;
+    private hasMenu = true;
+    private hasTime = true;
+    private isLoading = true;
 
     private fetchLuchMenu(url: string): Promise<any> {
         return fetch("https://ravintolat-kartalla.herokuapp.com",
@@ -80,14 +94,20 @@ export default class Popup extends Vue {
 }
 
     private parseFazer(menu: any): void {
-        this.lunchMenu = <FoodMenu[]>menu.MenusForDays[0];
+        this.lunchMenu = <FoodMenu[]>menu.MenusForDays[0].SetMenus;
         this.title = menu.RestaurantName;
         this.lunchTime = menu.MenusForDays[0].LunchTime;
+        if (this.lunchMenu.length < 1) {
+            this.hasMenu = false;
+            this.hasTime = false;
+        }
     }
 
     private parseUnicafe(menu: any): void {
         let restaurantMenu = menu.filter((menu: any) => this.title.toLowerCase().includes(menu.menuData.name.toLowerCase()))[0]
         if (!restaurantMenu) {
+            this.hasMenu = false;
+            this.hasTime = false;
             return;
         }
         let year = new Date().getFullYear();
@@ -112,6 +132,8 @@ export default class Popup extends Vue {
             this.lunchTime = openHours.opening_hour + " - " + openHours.closing_hour;
         } else {
             this.lunchTime = "";
+            this.hasMenu = false;
+            this.hasTime = false;
         }
         let lunchMenu: FoodMenu[] = []
         menuData.forEach((item: any) => {
@@ -126,24 +148,39 @@ export default class Popup extends Vue {
             lunchMenu.push(food);
         })
         this.lunchMenu = lunchMenu;
+        if (this.lunchMenu.length < 1) {
+            this.hasMenu = false;
+        }
     }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.popup__menu {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-column-gap: 10px;
-    grid-row-gap: 15px;
-    margin-top: 5px;
-
-    &__item {
+.popup {
+    &__menu {
         display: grid;
-        grid-template-columns: 33% 33% 33%;
-        grid-column-gap: 5px;
-        word-break: break-word;
+        grid-template-columns: 1fr;
+        grid-column-gap: 10px;
+        grid-row-gap: 15px;
+        margin-top: 5px;
+
+        &__item {
+            display: grid;
+            grid-template-columns: 33% 33% 33%;
+            grid-column-gap: 5px;
+            word-break: break-word;
+        }
+    }
+
+    &__loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 5px;
+        & > i {
+            font-size: 30px;
+        }
     }
 }
 </style>
