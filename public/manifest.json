@@ -1,6 +1,6 @@
 {
-  "name": "restaurants_on_map",
-  "short_name": "restaurants_on_map",
+  "name": "Ravintolat kartalla",
+  "short_name": "Ravintolat",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",
