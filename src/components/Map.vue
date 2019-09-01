@@ -52,7 +52,8 @@ export default class Map extends Vue {
   private map: LMap;
   private showParagraph = false;
 
-  @Prop() restaurants: Restaurant[] = [];
+  //@ts-ignore
+  @Prop() restaurants: Restaurant[];
 
   mounted(): void {
     delete Icon.Default.prototype._getIconUrl

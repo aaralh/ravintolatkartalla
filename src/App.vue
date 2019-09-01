@@ -32,6 +32,7 @@ export default class App extends Vue {
                     restaurant.address,
                     restaurant.location,
                     restaurant.website,
+                    restaurant.type,
                     restaurant.lunchUrl
                 )
                 this.restaurantList.push(newRestaurant);

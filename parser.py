@@ -70,7 +70,12 @@ def getLunchListsForRestaurants():
         restaurants = json.load(json_file)
 
     for index in range(len(restaurants)):
-        if (restaurants[index]["website"] == ""):
+        if ("UNICAFE" in restaurants[index]["title"]):
+            restaurants[index]["lunchUrl"] = "https://unicafe.fi/wp-json/swiss/v1/restaurants?lang=fi"
+            restaurants[index]["type"] = "unicafe"
+
+        elif (restaurants[index]["website"] == ""):
+            restaurants[index]["type"] = "other"
             continue
         
         if ("www.fazerfoodco.fi" in restaurants[index]["website"] or "www.amica.fi" in restaurants[index]["website"]):
@@ -84,6 +89,8 @@ def getLunchListsForRestaurants():
             except:
                 restaurants[index]["lunchUrl"] = None
                 print("No luch url found")
+
+            restaurants[index]["type"] = "fazer"
 
     saveRestaurantsToFile(restaurants)    
 

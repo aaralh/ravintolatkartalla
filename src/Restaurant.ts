@@ -14,6 +14,7 @@ export class Restaurant {
         private _address: string,
         private _location: Location,
         private _website: string,
+        private _type: string,
         private _lunchUrl?: string
     ) {
         if(!this.location) {
@@ -26,6 +27,10 @@ export class Restaurant {
 
     public get title(): string {
         return this._title;
+    }
+
+    public get type(): string {
+        return this._type;
     }
 
     public get address(): string {
