@@ -44,7 +44,7 @@ export default class Popup extends Vue {
     private title = this.restaurant!.title;
 
     private fetchLuchMenu(url: string): Promise<any> {
-        return fetch("http://ravintolatkartalla.dy.fi:4500",
+        return fetch("https://ravintolat-kartalla.herokuapp.com",
             {
                 method: "POST",
                 body: JSON.stringify({url: url+"&date=2019-8-30"})
