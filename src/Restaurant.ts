@@ -15,13 +15,13 @@ export class Restaurant {
         private _location: Location,
         private _website: string,
         private _type: string,
-        private _lunchUrl?: string
+        private _lunchUrl?: string,
     ) {
-        if(!this.location) {
+        if (!this.location) {
             return;
         }
         this._marker = L.marker([+this.location.lat, +this.location.lng]);
-        let content = this.website ? '<p>' + this.title + '</p><br><a href="' + this.website + '">Ruokalista</a>' : '<p>' + this.title + '</p>';
+        const content = this.website ? '<p>' + this.title + '</p><br><a href="' + this.website + '">Ruokalista</a>' : '<p>' + this.title + '</p>';
         this._marker.bindPopup(content);
     }
 
@@ -40,12 +40,12 @@ export class Restaurant {
     public get location(): Location {
         return this._location;
     }
-    
+
     public get website(): string {
         return this._website;
     }
 
-    public get lunchUrl(): string | undefined{
+    public get lunchUrl(): string | undefined {
         return this._lunchUrl;
     }
 
@@ -55,7 +55,6 @@ export class Restaurant {
         }
         this._map = map;
         this._marker.addTo(map);
-      
     }
 
     public hideMarker(): void {
@@ -63,7 +62,6 @@ export class Restaurant {
             return;
         }
         this._marker.remove();
-
     }
 
     public showMarker(): void {

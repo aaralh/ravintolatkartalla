@@ -35,6 +35,14 @@ interface FoodMenu {
 @Component<Popup>({
     watch: {
         loadMenu: function(newVal, oldVal) {
+            if(this.restaurant.type === "unicafe") {
+                let menu = this.$store.getters.unicafeMenu;
+                if (menu) {
+                    this.isLoading = false;
+                    this.parseUnicafe(menu);
+                }
+            }
+
             if (!oldVal && newVal) {
                if (this.restaurant!.lunchUrl) {
                     this.fetchLuchMenu(this.restaurant!.lunchUrl).then(menu => {
@@ -45,10 +53,12 @@ interface FoodMenu {
                                 break;
                             case "unicafe":
                                 this.parseUnicafe(menu);
+                                this.$store.commit("unicafeMenu", menu);
                                 break;
                         }
                     });
                 } else {
+                    this.isLoading = false;
                     this.hasMenu = false;
                     this.hasTime = false;
                 }
@@ -81,19 +91,23 @@ export default class Popup extends Vue {
     }
 
     private getDate(date: string, format: string, delimiter: string): Date {
-            let formatLowerCase=format.toLowerCase();
-            let formatItems=formatLowerCase.split(delimiter);
-            let dateItems=date.split(delimiter);
-            let monthIndex=formatItems.indexOf("mm");
-            let dayIndex=formatItems.indexOf("dd");
-            let yearIndex=formatItems.indexOf("yyyy");
-            let month=parseInt(dateItems[monthIndex]);
-            month-=1;
-            let formatedDate = new Date(parseInt(dateItems[yearIndex]), month, parseInt(dateItems[dayIndex]));
+            const formatLowerCase = format.toLowerCase();
+            const formatItems = formatLowerCase.split(delimiter);
+            const dateItems = date.split(delimiter);
+            const monthIndex = formatItems.indexOf("mm");
+            const dayIndex = formatItems.indexOf("dd");
+            const yearIndex = formatItems.indexOf("yyyy");
+            let month = parseInt(dateItems[monthIndex]);
+            month -= 1;
+            const formatedDate = new Date(parseInt(dateItems[yearIndex]), month, parseInt(dateItems[dayIndex]));
             return formatedDate;
 }
 
     private parseFazer(menu: any): void {
+        if (!menu.MenusForDays) {
+            this.hasMenu = false;
+            this.hasTime = false;
+        }
         this.lunchMenu = <FoodMenu[]>menu.MenusForDays[0].SetMenus;
         this.title = menu.RestaurantName;
         this.lunchTime = menu.MenusForDays[0].LunchTime;
