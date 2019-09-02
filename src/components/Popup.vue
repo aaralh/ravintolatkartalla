@@ -35,6 +35,7 @@ interface FoodMenu {
 @Component<Popup>({
     watch: {
         loadMenu: function(newVal, oldVal) {
+            
             if(this.restaurant.type === "unicafe") {
                 let menu = this.$store.getters.unicafeMenu;
                 if (menu) {
@@ -42,8 +43,7 @@ interface FoodMenu {
                     this.parseUnicafe(menu);
                 }
             }
-
-            if (!oldVal && newVal) {
+            if (!oldVal && newVal && !this.$store.getters.unicafeMenu) {
                if (this.restaurant!.lunchUrl) {
                     this.fetchLuchMenu(this.restaurant!.lunchUrl).then(menu => {
                         this.isLoading = false;
@@ -139,9 +139,9 @@ export default class Popup extends Vue {
                 closing_hour: string,
             };
             if (weekDay === 5) {
-                openHours = visitingHours.group.filter((item: any) => item.weekDay[0] === "Fri")[0];
+                openHours = visitingHours.group.filter((item: any) => item.weekday[0] === "Fri")[0];
             } else {
-                openHours = visitingHours.group.filter((item: any) => item.weekDay[0] === "Mon")[0];
+                openHours = visitingHours.group.filter((item: any) => item.weekday[0] === "Mon")[0];
             }
             this.lunchTime = openHours.opening_hour + " - " + openHours.closing_hour;
         } else {
