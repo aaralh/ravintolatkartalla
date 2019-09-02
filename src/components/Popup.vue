@@ -87,6 +87,9 @@ export default class Popup extends Vue {
             })
             .then(function(response) {
                 return response.json();
+            },
+            (err) => {
+                console.error(err);
             })
     }
 
@@ -172,6 +175,8 @@ export default class Popup extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .popup {
+    height: 100%;
+    width: 100%;
     &__menu {
         display: grid;
         grid-template-columns: 1fr;

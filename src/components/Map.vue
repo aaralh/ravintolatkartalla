@@ -45,8 +45,8 @@ import RestaurantMarker from './RestaurantMarker.vue';
 })
 export default class Map extends Vue {
   private url = "https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw";
-  private zoom = 3;
-  private center = [0, 0];
+  private zoom = 14;
+  private center = [60.167255, 24.940523];
   private bounds = null;
   //@ts-ignore
   private map: LMap;
