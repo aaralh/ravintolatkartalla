@@ -178,6 +178,10 @@ export default class Popup extends Vue {
         grid-column-gap: 10px;
         grid-row-gap: 15px;
         margin-top: 5px;
+        max-height: 80vh;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+        overflow-x: hidden;
 
         &__item {
             display: grid;
