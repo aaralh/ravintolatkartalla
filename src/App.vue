@@ -46,7 +46,7 @@ export default class App extends Vue {
   private updateExists = false;
   private snackBtnText = 'Päivitä';
   private snackWithBtnText = 'Päivityksiä saatavilla';
-  private snackWithButtons = true;
+  private snackWithButtons = false;
   private timeout = 0;
 
   private getRestaurants(): Promise<Restaurant[]> {
