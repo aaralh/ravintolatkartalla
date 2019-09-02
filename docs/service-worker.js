@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "precache-manifest.559ea00d771b0c767a7f22f30359e548.js"
+  "precache-manifest.e01e7ff4c0817cde0741833fb7f20538.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "restaurants_on_map"});
