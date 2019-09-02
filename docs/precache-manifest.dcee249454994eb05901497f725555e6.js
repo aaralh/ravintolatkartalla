@@ -8,15 +8,15 @@ self.__precacheManifest = [
     "url": "restaurants.json"
   },
   {
-    "revision": "41534b95ec501a5a14d7",
-    "url": "js/chunk-vendors.39845f54.js"
+    "revision": "0295414d790c8a642f8d",
+    "url": "js/chunk-vendors.0bb930b7.js"
   },
   {
-    "revision": "f64fb1ee46f6ab286a89",
-    "url": "js/app.fe06f33b.js"
+    "revision": "cecf209f8e9416603279",
+    "url": "js/app.c5f21d02.js"
   },
   {
-    "revision": "1648389fbc648c136ff7cd978cd3f84c",
+    "revision": "a799b9a939118eefab6e89a89d243020",
     "url": "index.html"
   },
   {
@@ -24,11 +24,11 @@ self.__precacheManifest = [
     "url": "dataAll.json"
   },
   {
-    "revision": "41534b95ec501a5a14d7",
+    "revision": "0295414d790c8a642f8d",
     "url": "css/chunk-vendors.75482da4.css"
   },
   {
-    "revision": "f64fb1ee46f6ab286a89",
+    "revision": "cecf209f8e9416603279",
     "url": "css/app.fee42707.css"
   }
 ];

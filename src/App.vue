@@ -1,9 +1,26 @@
 <template>
   <div id="app">
     <Map :restaurants="restaurantList"></Map>
-    <button v-if="updateExists" @click="refreshApp">
-        New version available! Click to update
-    </button>
+    <v-snackbar
+      v-model="snackWithButtons"
+      :timeout="timeout"
+      bottom
+      center
+      class="snack">
+      {{ snackWithBtnText }}
+      <v-spacer />
+      <v-btn
+        dark
+        text
+        color="#00f500"
+        @click.native="refreshApp">
+        {{ snackBtnText }}
+      </v-btn>
+      <v-btn
+        icon
+        @click="snackWithButtons = false">
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -27,6 +44,10 @@ export default class App extends Vue {
   private refreshing = false;
   private registration = null;
   private updateExists = false;
+  private snackBtnText = 'Päivitä';
+  private snackWithBtnText = 'Päivityksiä saatavilla';
+  private snackWithButtons = true;
+  private timeout = 0;
 
   private getRestaurants(): Promise<Restaurant[]> {
     return fetch('restaurants.json')
