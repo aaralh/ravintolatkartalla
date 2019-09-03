@@ -36,14 +36,7 @@ interface FoodMenu {
     watch: {
         loadMenu: function(newVal, oldVal) {
             
-            if(this.restaurant.type === "unicafe") {
-                let menu = this.$store.getters.unicafeMenu;
-                if (menu) {
-                    this.isLoading = false;
-                    this.parseUnicafe(menu);
-                }
-            }
-            if (!oldVal && newVal && !this.$store.getters.unicafeMenu) {
+            if (!oldVal && newVal) {
                if (this.restaurant!.lunchUrl) {
                     this.fetchLuchMenu(this.restaurant!.lunchUrl).then(menu => {
                         this.isLoading = false;
@@ -53,7 +46,6 @@ interface FoodMenu {
                                 break;
                             case "unicafe":
                                 this.parseUnicafe(menu);
-                                this.$store.commit("unicafeMenu", menu);
                                 break;
                         }
                     });
@@ -80,11 +72,7 @@ export default class Popup extends Vue {
     private isLoading = true;
 
     private fetchLuchMenu(url: string): Promise<any> {
-        return fetch("https://ravintolat-kartalla.herokuapp.com",
-            {
-                method: "POST",
-                body: JSON.stringify({url: url})
-            })
+        return fetch("https://akalhainen.me/" + url)
             .then(function(response) {
                 return response.json();
             },
