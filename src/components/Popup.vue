@@ -5,7 +5,7 @@
       <div v-if="hasTime" class="popup__label">Lounasaika: {{ lunchTime }}</div>
       <div v-else class="popup__label">Lounasaika: Ei lounasaikaa saatavilla</div>
       <div v-if="hasMenu" class="popup__menu">
-          <div class="popup__menu__item" v-for="item in lunchMenu" :key="item.Name">
+          <div class="popup__menu__item" v-for="item in lunchMenu" :key="item.Components[0]">
               <div class="popup__menu__item__title">{{ item.Name }}</div>
               <div class="popup__menu__item__ingredients">
                   <div class="popup__menu__item__ingredients__item" v-for="ingredient in item.Components" :key="ingredient">{{ ingredient }}</div>
@@ -37,6 +37,7 @@ interface FoodMenu {
         loadMenu: function(newVal, oldVal) {
             
             if (!oldVal && newVal) {
+                console.log(this.restaurant!.lunchUrl)
                if (this.restaurant!.lunchUrl) {
                     this.fetchLuchMenu(this.restaurant!.lunchUrl).then(menu => {
                         this.isLoading = false;
