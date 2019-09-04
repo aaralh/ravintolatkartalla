@@ -13,15 +13,7 @@
             <div class="popup__menu__item" v-for="item in lunchMenu" :key="item.Name">
                 <div class="popup__menu__item__title">{{ item.Name }}</div>
                 <div class="popup__menu__item__ingredients">
-                    <div class="popup__menu__item__container" :class="{'expanded' : showFullIncredients}">
-                        <div class="popup__menu__item__ingredients__item" v-for="ingredient in item.Components" :key="ingredient">{{ ingredient }}</div>
-                    </div>
-                    <div v-if="!showFullIncredients" class="popup__menu__item__container__button" @click="showFullIncredients = !showFullIncredients">
-                        Näytä enemmän
-                    </div>
-                    <div v-else class="popup__menu__item__container__button" @click="showFullIncredients = !showFullIncredients">
-                        Näytä vähemmän
-                    </div>
+                    <Incredient :item="item"></Incredient>
                 </div>
                 <div class="popup__menu__item__price">{{ item.Price }}</div>
             </div>
@@ -38,6 +30,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Restaurant } from '../Restaurant';
+import Incredient from './Incredient.vue';
 
 interface FoodMenu {
     Price: string,
@@ -46,6 +39,9 @@ interface FoodMenu {
 }
 
 @Component<Popup>({
+    components: {
+        Incredient,
+    },
     watch: {
         loadMenu: function(newVal, oldVal) {
             
@@ -84,7 +80,6 @@ export default class Popup extends Vue {
     private hasMenu = true;
     private hasTime = true;
     private isLoading = true;
-    private showFullIncredients = false;
 
     private fetchLuchMenu(url: string): Promise<any> {
         return fetch("https://akalhainen.me/" + url)
@@ -200,20 +195,6 @@ export default class Popup extends Vue {
             &__labels {
                 display: grid;
                 grid-template-columns: 33% 33% 33%;
-            }
-
-            &__container {
-                height: 20px;
-                overflow: hidden;
-                
-                &.expanded {
-                    height: initial;
-                }
-                
-                &__button {
-                    color: #1a0dab;
-                    cursor: pointer;
-                }
             }
         }
     }
