@@ -33,11 +33,13 @@ export default class Incredient extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
     .incredient__container {
-        height: 20px;
+        max-height: 20px;
         overflow: hidden;
+        transition: max-height .3s linear;
         
         &.expanded {
-            height: initial;
+            max-height: 100vh;
+            transition: max-height .3s linear;
         }
         
         &__button {
