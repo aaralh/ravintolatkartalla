@@ -50,7 +50,7 @@ export default class App extends Vue {
   private timeout = 0;
 
   private getRestaurants(): Promise<Restaurant[]> {
-    return fetch('restaurants.json')
+    return fetch('https://akalhainen.me/ruokalistat/restaurants.json')
       .then(function(response) {
         return response.json();
       })
