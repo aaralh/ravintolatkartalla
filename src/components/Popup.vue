@@ -5,13 +5,26 @@
       <div v-if="hasTime" class="popup__label">Lounasaika: {{ lunchTime }}</div>
       <div v-else class="popup__label">Lounasaika: Ei lounasaikaa saatavilla</div>
       <div v-if="hasMenu" class="popup__menu">
-          <div class="popup__menu__item" v-for="item in lunchMenu" :key="item.Components[0]">
-              <div class="popup__menu__item__title">{{ item.Name }}</div>
-              <div class="popup__menu__item__ingredients">
-                  <div class="popup__menu__item__ingredients__item" v-for="ingredient in item.Components" :key="ingredient">{{ ingredient }}</div>
-              </div>
-              <div class="popup__menu__item__price">{{ item.Price }}</div>
-          </div>
+            <div class="popup__menu__item__labels">
+                <div class="">Nimi</div>
+                <div class="">Ainekset</div>
+                <div class="">Hinta</div>
+            </div>
+            <div class="popup__menu__item" v-for="item in lunchMenu" :key="item.Name">
+                <div class="popup__menu__item__title">{{ item.Name }}</div>
+                <div class="popup__menu__item__ingredients">
+                    <div class="popup__menu__item__container" :class="{'expanded' : showFullIncredients}">
+                        <div class="popup__menu__item__ingredients__item" v-for="ingredient in item.Components" :key="ingredient">{{ ingredient }}</div>
+                    </div>
+                    <div v-if="!showFullIncredients" class="popup__menu__item__container__button" @click="showFullIncredients = !showFullIncredients">
+                        Näytä enemmän
+                    </div>
+                    <div v-else class="popup__menu__item__container__button" @click="showFullIncredients = !showFullIncredients">
+                        Näytä vähemmän
+                    </div>
+                </div>
+                <div class="popup__menu__item__price">{{ item.Price }}</div>
+            </div>
       </div>
       <div v-else>
           <div class="popup__label">Ei ruokalistaa saatavilla</div>
@@ -71,6 +84,7 @@ export default class Popup extends Vue {
     private hasMenu = true;
     private hasTime = true;
     private isLoading = true;
+    private showFullIncredients = false;
 
     private fetchLuchMenu(url: string): Promise<any> {
         return fetch("https://akalhainen.me/" + url)
@@ -182,6 +196,25 @@ export default class Popup extends Vue {
             grid-template-columns: 33% 33% 33%;
             grid-column-gap: 5px;
             word-break: break-word;
+
+            &__labels {
+                display: grid;
+                grid-template-columns: 33% 33% 33%;
+            }
+
+            &__container {
+                height: 20px;
+                overflow: hidden;
+                
+                &.expanded {
+                    height: initial;
+                }
+                
+                &__button {
+                    color: #1a0dab;
+                    cursor: pointer;
+                }
+            }
         }
     }
 
