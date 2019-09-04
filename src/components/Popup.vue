@@ -223,6 +223,7 @@ export default class Popup extends Vue {
                 
                 &__button {
                     color: #1a0dab;
+                    cursor: pointer;
                 }
             }
         }
