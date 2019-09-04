@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Map :restaurants="restaurantList"></Map>
-    <v-snackbar
+    <!-- <v-snackbar
       v-model="snackWithButtons"
       :timeout="timeout"
       bottom
@@ -20,7 +20,7 @@
         icon
         @click="snackWithButtons = false">
       </v-btn>
-    </v-snackbar>
+    </v-snackbar> -->
   </div>
 </template>
 
