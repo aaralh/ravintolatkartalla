@@ -1,7 +1,7 @@
 <template>
   <div class="incredient">
     <div class="incredient__container" :class="{'expanded' : showFullIncredients}">
-        <div class="incredient__ingredients__item" v-for="ingredient in item.Components" :key="ingredient">{{ ingredient }}</div>
+        <div class="incredient__ingredients__item" v-for="ingredient in item.Components" :key="ingredient" v-html="ingredient"></div>
     </div>
     <div v-if="!showFullIncredients" class="incredient__container__button" @click="showFullIncredients = !showFullIncredients">
         Näytä enemmän

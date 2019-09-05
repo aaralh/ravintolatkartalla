@@ -59,6 +59,10 @@ interface FoodMenu {
                                 break;
                             case "sodexo":
                                 this.parseSodexo(menu);
+                                break;
+                            case "juvenes":
+                                this.parseJuvenes(menu);
+                                break;
                         }
                     });
                 } else {
@@ -204,6 +208,45 @@ export default class Popup extends Vue {
             this.hasMenu = false;
             this.hasTime = false;
         }
+    }
+
+    private parseJuvenes(menu: any): void {
+        if (!menu.MealOptions) {
+            this.hasMenu = false;
+            this.hasTime = false;
+        }
+        fetch(this.restaurant.website)
+            .then(function(response) {
+                return response.json();
+            },
+            (err) => {
+                console.error(err);
+            }).then(data => {
+                const weekDays = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
+                const day = weekDays[new Date().getDay()]
+                let lunchMenu: FoodMenu[] = []
+                menu.MealOptions.forEach((item: any) => {
+                    let food: FoodMenu = {
+                        Price: "",
+                        Components: [""],
+                        Name: "",
+                    };
+                    food.Components = [item.MenuItems[0].Ingredients];
+                    food.Price = "";
+                    food.Name = item.Name_FI;
+                    lunchMenu.push(food);
+                })
+
+                this.lunchMenu = <FoodMenu[]>lunchMenu;
+                this.title = menu.KitchenName;
+                const start = `${day}Start`;
+                const end = `${day}End`;
+                this.lunchTime = data.d.OpenInfo[start] + " - " + data.d.OpenInfo[end];
+                if (this.lunchMenu.length < 1) {
+                    this.hasMenu = false;
+                    this.hasTime = false;
+                }
+            })
     }
 }
 </script>
