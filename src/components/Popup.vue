@@ -57,6 +57,8 @@ interface FoodMenu {
                             case "unicafe":
                                 this.parseUnicafe(menu);
                                 break;
+                            case "sodexo":
+                                this.parseSodexo(menu);
                         }
                     });
                 } else {
@@ -109,9 +111,12 @@ export default class Popup extends Vue {
             this.hasMenu = false;
             this.hasTime = false;
         }
-        this.lunchMenu = <FoodMenu[]>menu.MenusForDays[0].SetMenus;
+        let menuData = menu.MenusForDays.filter((menuItem: any) => {
+            return new Date(menuItem.Date).getDate() === new Date().getDate();
+        })[0];
+        this.lunchMenu = <FoodMenu[]>menuData.SetMenus;
         this.title = menu.RestaurantName;
-        this.lunchTime = menu.MenusForDays[0].LunchTime;
+        this.lunchTime = menuData.LunchTime;
         if (this.lunchMenu.length < 1) {
             this.hasMenu = false;
             this.hasTime = false;
@@ -165,6 +170,39 @@ export default class Popup extends Vue {
         this.lunchMenu = lunchMenu;
         if (this.lunchMenu.length < 1) {
             this.hasMenu = false;
+        }
+    }
+
+    private parseSodexo(menu: any): void {
+        if (!menu.menus) {
+            this.hasMenu = false;
+            this.hasTime = false;
+        }
+        const weekDays = ["saturday", "sunday", "monday", "tuesday", "wednesday", "thursday", "friday"];
+        let day = weekDays[new Date().getDay()]
+
+        let lunchMenu: FoodMenu[] = []
+        if (menu.menus[day]) {
+            menu.menus[day].forEach((item: any) => {
+                let food: FoodMenu = {
+                    Price: "",
+                    Components: [""],
+                    Name: "",
+                };
+                food.Components = [item.properties];
+                food.Price = item.price;
+                food.Name = item.title_fi;
+                lunchMenu.push(food);
+            })
+
+            this.lunchMenu = <FoodMenu[]>lunchMenu;
+            this.title = menu.meta.ref_title;
+            this.lunchTime = "";
+            this.hasTime = false;
+        }
+        if (this.lunchMenu.length < 1) {
+            this.hasMenu = false;
+            this.hasTime = false;
         }
     }
 }
