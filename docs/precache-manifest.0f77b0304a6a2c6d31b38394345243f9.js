@@ -8,11 +8,11 @@ self.__precacheManifest = [
     "url": "js/chunk-vendors.0bb930b7.js"
   },
   {
-    "revision": "5e031bd13198b8c07586",
-    "url": "js/app.13e06793.js"
+    "revision": "c7cf73acf15c3a923b74",
+    "url": "js/app.99c19b45.js"
   },
   {
-    "revision": "9401c3dc010adc96844f227148afe84d",
+    "revision": "36b231e7c91964de416acd102a2e93c8",
     "url": "index.html"
   },
   {
@@ -24,7 +24,7 @@ self.__precacheManifest = [
     "url": "css/chunk-vendors.75482da4.css"
   },
   {
-    "revision": "5e031bd13198b8c07586",
+    "revision": "c7cf73acf15c3a923b74",
     "url": "css/app.0a212064.css"
   }
 ];
