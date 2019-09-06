@@ -141,19 +141,14 @@ export default class Popup extends Vue {
             return menuItemDate.getDate() === new Date().getDate();
         })[0].data;
         this.title = restaurantMenu.title;
-        let visitingHours = restaurantMenu.visitingHours.filter((hour: any) => hour.name === "Lounas")[0]
+        let visitingHours = restaurantMenu.menuData.visitingHours.lounas.items
         let weekDay = new Date().getDay();
-        if (visitingHours && (weekDay !== 0 && weekDay !== 6)) {
+        if (visitingHours) {
             let openHours: {
                 opening_hour: string,
                 closing_hour: string,
             };
-            if (weekDay === 5) {
-                openHours = visitingHours.group.filter((item: any) => item.weekday[0] === "Fri")[0];
-            } else {
-                openHours = visitingHours.group.filter((item: any) => item.weekday[0] === "Mon")[0];
-            }
-            this.lunchTime = openHours.opening_hour + " - " + openHours.closing_hour;
+            this.lunchTime = visitingHours[0].label + " " + visitingHours[0].hours + ", " + visitingHours[1].label + " " + visitingHours[1].hours;
         } else {
             this.lunchTime = "";
             this.hasMenu = false;
