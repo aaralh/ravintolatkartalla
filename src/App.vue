@@ -1,26 +1,6 @@
 <template>
   <div id="app">
     <Map :restaurants="restaurantList"></Map>
-    <!-- <v-snackbar
-      v-model="snackWithButtons"
-      :timeout="timeout"
-      bottom
-      center
-      class="snack">
-      {{ snackWithBtnText }}
-      <v-spacer />
-      <v-btn
-        dark
-        text
-        color="#00f500"
-        @click.native="refreshApp">
-        {{ snackBtnText }}
-      </v-btn>
-      <v-btn
-        icon
-        @click="snackWithButtons = false">
-      </v-btn>
-    </v-snackbar> -->
   </div>
 </template>
 
@@ -41,12 +21,6 @@ import { Restaurant } from './Restaurant';
 })
 export default class App extends Vue {
   private restaurantList: Restaurant[] = [];
-  private refreshing = false;
-  private registration = null;
-  private updateExists = false;
-  private snackBtnText = 'Päivitä';
-  private snackWithBtnText = 'Päivityksiä saatavilla';
-  private snackWithButtons = false;
   private timeout = 0;
 
   private getRestaurants(): Promise<Restaurant[]> {
@@ -72,28 +46,12 @@ export default class App extends Vue {
     });
 
     document.addEventListener(
-      'swUpdated', this.showRefreshUI, { once: true }
-    );
-    navigator.serviceWorker.addEventListener(
-      'controllerchange', () => {
-        if (this.refreshing) return;
-        this.refreshing = true;
-        window.location.reload();
-      }
+      'swUpdated', this.updateApp, { once: true }
     );
   }
 
-  private showRefreshUI (e: any) {
-    this.registration = e.detail;
-    this.updateExists = true;
-  };
-
-  private refreshApp () {
-    this.updateExists = false;
-    //@ts-ignore
-    if (!this.registration || !this.registration.waiting) { return; }
-    //@ts-ignore
-    this.registration.waiting.postMessage('skipWaiting');
+  private updateApp (e: any) {
+      window.location.reload(true);
   };
 }
 </script>
