@@ -221,12 +221,15 @@ export default class Popup extends Vue {
                 const day = weekDays[new Date().getDay()]
                 let lunchMenu: FoodMenu[] = []
                 menu.MealOptions.forEach((item: any) => {
+                    if (item.MealOptionId === -1) {
+                        return;
+                    }
                     let food: FoodMenu = {
                         Price: "",
                         Components: [""],
                         Name: "",
                     };
-                    food.Components = [item.MenuItems[0].Ingredients];
+                    food.Components = item.MenuItems[0] ? [item.MenuItems[0].Incredients] : [];
                     food.Price = "";
                     food.Name = item.Name_FI;
                     lunchMenu.push(food);
