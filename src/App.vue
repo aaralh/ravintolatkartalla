@@ -8,7 +8,7 @@
         <div v-if="showInformation" class="app__info__content">
           <p>Opiskelijaravintolat sivulta löydät kaikki ravintolat koko Suomesta joihin Kela myöntää ateriatukea. 
             Ravintolan merkkiä klikkaamalla näet kyseisen ravintolat lounaslistan sekä aukioloajat. 
-            Rajapintojen puutteiden vuoksi kaikkien ravintoloiden ruokalistoja tai lounasaikoja ei välttämättä ole saatavilla.
+            Rajapintojen puutteiden vuoksi joidenkin ravintoloiden ruokalistoja tai lounasaikoja ei välttämättä ole saatavilla.
           </p>
           <br>
           <p class="app__info__content__disclaimer">
