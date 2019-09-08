@@ -97,10 +97,12 @@ export default class App extends Vue {
     z-index: 99999;
     transition: clip-path .3s;
     clip-path: inset(0 0 0 0);
+    -webkit-clip-path: inset(0 0 0 0);
 
     &.minimized {
         transition: clip-path .3s;
         clip-path: inset(0 0 calc(100% - 30px) calc(100% - 30px));
+        -webkit-clip-path: inset(0 0 calc(100% - 30px) calc(100% - 30px));
     }
 
     &__icon {
