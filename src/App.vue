@@ -1,5 +1,21 @@
 <template>
   <div id="app">
+    <div class="app__info"
+      :class="{'minimized' : !showInformation}"
+      @click.stop="informationClickHanler">
+      <i class="fa fa-info app__info__icon"></i>
+      <div class="app__info__content">
+        <p>Opiskelijaravintolat sivulta löydät kaikki ravintolat koko Suomesta joihin Kela myöntää ateriatukea. 
+          Ravintolan merkkiä klikkaamalla näet kyseisen ravintolat lounaslistan sekä aukioloajat. 
+          Rajapintojen puutteiden vuoksi kaikkien ravintoloiden ruokalistoja tai lounasaikoja ei välttämättä ole saatavilla.
+        </p>
+        <br>
+        <p class="app__info__content__disclaimer">
+          Ravintoloiden sijainti kartalla on suuntaa antava ja se pohjautuu ravintoloiden Kelalle antamaan osoitteistoon.
+        </p>
+      </div>
+    </div>
+
     <Map :restaurants="restaurantList"></Map>
   </div>
 </template>
@@ -22,12 +38,17 @@ import { Restaurant } from './Restaurant';
 export default class App extends Vue {
   private restaurantList: Restaurant[] = [];
   private timeout = 0;
+  private showInformation = false;
 
   private getRestaurants(): Promise<Restaurant[]> {
     return fetch('https://akalhainen.me/ruokalistat/restaurants.json')
       .then(function(response) {
         return response.json();
       })
+  }
+
+  private informationClickHanler(e: Event): void {
+    this.showInformation = !this.showInformation;
   }
 
   created(): void {
@@ -58,7 +79,36 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-#app {
+.app__info {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    max-height: 100%;
+    max-width: calc(100vw - 20px);
+    border: 1px solid lightgray;
+    background-color: whitesmoke;
+    color: #333333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    z-index: 99999;
+    transition: clip-path .3s;
+    clip-path: inset(0 0 0 0);
+    
+
+    &.minimized {
+        transition: clip-path .3s;
+        clip-path: inset(0 0 calc(100% - 30px) calc(100% - 30px));
+    }
+
+    &__icon {
+        margin: 6px 11px;
+    }
+
+    &__content {
+        padding: 5px 10px;
+    }
 }
 
 body {
