@@ -9,10 +9,12 @@
       @update:bounds="boundsUpdated"
     >
       <LTileLayer :url="url"/>
-      <RestaurantMarker v-for="restaurant in restaurantList"
-        :key="restaurant.title"
-        :restaurant="restaurant">
-      </RestaurantMarker>
+      <Vue2LeafletMarkerCluster>
+        <RestaurantMarker v-for="restaurant in restaurantList"
+          :key="restaurant.title"
+          :restaurant="restaurant">
+        </RestaurantMarker>
+      </Vue2LeafletMarkerCluster>
     </LMap>
   </div>
 </template>
@@ -24,12 +26,15 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import {LMap, LTileLayer, LMarker, LPopup} from 'vue2-leaflet'
 import { Restaurant } from '../Restaurant';
 import RestaurantMarker from './RestaurantMarker.vue';
+//@ts-ignore
+import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster';
 
 @Component<Map>({
   components: {
     LMap,
     LTileLayer,
     RestaurantMarker,
+    Vue2LeafletMarkerCluster,
   },
   methods: {
     zoomUpdated (zoom) {
@@ -84,6 +89,8 @@ export default class Map extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 @import "~leaflet/dist/leaflet.css";
+@import "~leaflet.markercluster/dist/MarkerCluster.css";
+@import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
   .map {
     width: 100vw;
     height: 100vh;
