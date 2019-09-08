@@ -77,7 +77,7 @@ export default class App extends Vue {
 
   private updateApp (e: any) {
       console.log("Deploying update..")
-      //window.location.reload(true);
+      window.location.reload(true);
   };
 }
 </script>
