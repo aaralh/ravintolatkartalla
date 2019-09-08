@@ -2,7 +2,7 @@
   <div id="app">
     <div class="app__info"
       :class="{'minimized' : !showInformation}"
-      @click.stop="informationClickHanler">
+      @click="informationClickHanler">
       <i class="fa fa-info app__info__icon"></i>
       <div class="app__info__content">
         <p>Opiskelijaravintolat sivulta löydät kaikki ravintolat koko Suomesta joihin Kela myöntää ateriatukea. 
@@ -39,6 +39,7 @@ export default class App extends Vue {
   private restaurantList: Restaurant[] = [];
   private timeout = 0;
   private showInformation = false;
+  private content = 0;
 
   private getRestaurants(): Promise<Restaurant[]> {
     return fetch('https://akalhainen.me/ruokalistat/restaurants.json')
@@ -48,6 +49,7 @@ export default class App extends Vue {
   }
 
   private informationClickHanler(e: Event): void {
+    this.content = this.content + 1;
     this.showInformation = !this.showInformation;
   }
 
@@ -95,7 +97,6 @@ export default class App extends Vue {
     z-index: 99999;
     transition: clip-path .3s;
     clip-path: inset(0 0 0 0);
-    
 
     &.minimized {
         transition: clip-path .3s;
