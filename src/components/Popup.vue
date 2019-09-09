@@ -128,7 +128,12 @@ export default class Popup extends Vue {
     }
 
     private parseUnicafe(menu: any): void {
-        let restaurantMenu = menu.filter((menu: any) => this.title.toLowerCase().includes(menu.menuData.name.toLowerCase()))[0]
+        let restaurantMenu;
+        if (this.title.toLowerCase().includes("soc & kom")) {
+            restaurantMenu = menu.filter((menu: any) => menu.menuData.name.toLowerCase().includes("soc&kom"))[0];
+        } else {
+            restaurantMenu = menu.filter((menu: any) => this.title.toLowerCase().includes(menu.menuData.name.toLowerCase()))[0];
+        }
         if (!restaurantMenu) {
             this.hasMenu = false;
             this.hasTime = false;
