@@ -177,7 +177,7 @@ export default class Popup extends Vue {
             this.hasMenu = false;
             this.hasTime = false;
         }
-        const weekDays = ["saturday", "sunday", "monday", "tuesday", "wednesday", "thursday", "friday"];
+        const weekDays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
         let day = weekDays[new Date().getDay()]
 
         let lunchMenu: FoodMenu[] = []
@@ -217,7 +217,7 @@ export default class Popup extends Vue {
             (err) => {
                 console.error(err);
             }).then(data => {
-                const weekDays = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
+                const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                 const day = weekDays[new Date().getDay()]
                 let lunchMenu: FoodMenu[] = []
                 menu.MealOptions.forEach((item: any) => {
