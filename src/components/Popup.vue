@@ -145,7 +145,6 @@ export default class Popup extends Vue {
             let menuItemDate = this.getDate(dateString, "dd.mm.yyyy", ".");
             return menuItemDate.getDate() === new Date().getDate();
         })[0].data;
-        console.log(menuData)
         this.title = restaurantMenu.title;
         let visitingHours = restaurantMenu.menuData.visitingHours.lounas.items
         let weekDay = new Date().getDay();
