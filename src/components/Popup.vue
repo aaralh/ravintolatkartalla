@@ -46,7 +46,6 @@ interface FoodMenu {
         loadMenu: function(newVal, oldVal) {
             
             if (!oldVal && newVal) {
-                console.log(this.restaurant!.lunchUrl)
                if (this.restaurant!.lunchUrl) {
                     this.fetchLuchMenu(this.restaurant!.lunchUrl).then(menu => {
                         this.isLoading = false;
