@@ -62,6 +62,8 @@ interface FoodMenu {
                             case "juvenes":
                                 this.parseJuvenes(menu);
                                 break;
+                            case "mehtimakiravintolat":
+                                this.parseMehtimaki(menu)
                         }
                     });
                 } else {
@@ -117,13 +119,22 @@ export default class Popup extends Vue {
         let menuData = menu.MenusForDays.filter((menuItem: any) => {
             return new Date(menuItem.Date).getDate() === new Date().getDate();
         })[0];
-        this.lunchMenu = <FoodMenu[]>menuData.SetMenus;
-        this.title = menu.RestaurantName;
-        this.lunchTime = menuData.LunchTime;
-        if (this.lunchMenu.length < 1) {
+        if (menuData) {
+            this.lunchMenu = <FoodMenu[]>menuData.SetMenus;
+            if(menuData.LunchTime) {
+                this.lunchTime = menuData.LunchTime;
+            } else {
+                this.hasTime = false;
+            }
+        } else {
             this.hasMenu = false;
             this.hasTime = false;
         }
+        if (this.lunchMenu.length < 1) {
+            this.hasMenu = false;
+        }
+       
+        this.title = menu.RestaurantName;
     }
 
     private parseUnicafe(menu: any): void {
@@ -248,6 +259,11 @@ export default class Popup extends Vue {
                     this.hasTime = false;
                 }
             })
+    }
+
+    parseMehtimaki(menu: any): void {
+        this.hasTime = false;
+        this.lunchMenu = menu;
     }
 }
 </script>
