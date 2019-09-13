@@ -64,10 +64,13 @@ interface FoodMenu {
                                 break;
                             case "mehtimakiravintolat":
                                 this.parseMehtimaki(menu)
+                                break;
                             case "semma":
                                 this.parseFazer(menu);
+                                break;
                             case "hel":
                                 this.parseHel(menu);
+                                break;
                         }
                     });
                 } else {
