@@ -64,6 +64,10 @@ interface FoodMenu {
                                 break;
                             case "mehtimakiravintolat":
                                 this.parseMehtimaki(menu)
+                            case "semma":
+                                this.parseFazer(menu);
+                            case "hel":
+                                this.parseHel(menu);
                         }
                     });
                 } else {
@@ -261,9 +265,34 @@ export default class Popup extends Vue {
             })
     }
 
-    parseMehtimaki(menu: any): void {
+    private parseMehtimaki(menu: any): void {
         this.hasTime = false;
         this.lunchMenu = menu;
+    }
+
+    private parseHel(menu: any): void {
+        let menuData = menu.Days.filter((menuItem: any) => {
+            return new Date(menuItem.Date).getDate() === new Date().getDate();
+        })[0];
+
+        let lunchMenu: FoodMenu[] = []
+        menuData.Meals.forEach((meal: any) => {
+            let food: FoodMenu = {
+                Price: "",
+                Components: [""],
+                Name: "",
+            };
+            food.Components = meal.Nutritions.map((nutrition: any) => nutrition.Name);
+            food.Price = meal.price;
+            food.Name = meal.Name;
+            lunchMenu.push(food);
+        })
+
+        this.lunchMenu = lunchMenu;
+        this.hasTime = false;
+        if (this.lunchMenu.length < 1) {
+            this.hasMenu = false;
+        }
     }
 }
 </script>
