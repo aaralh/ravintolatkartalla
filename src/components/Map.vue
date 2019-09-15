@@ -9,7 +9,7 @@
       @update:bounds="boundsUpdated"
     >
       <LTileLayer :url="url"/>
-      <Vue2LeafletMarkerCluster>
+      <Vue2LeafletMarkerCluster ref="cluster">
         <RestaurantMarker v-for="restaurant in restaurantList"
           :key="restaurant.title"
           :restaurant="restaurant">
@@ -21,7 +21,7 @@
 
 <script lang="ts">
 //@ts-ignore
-import { Icon } from "leaflet";
+import { Icon, DivIcon, Point } from "leaflet";
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import {LMap, LTileLayer, LMarker, LPopup} from 'vue2-leaflet'
 import { Restaurant } from '../Restaurant';
@@ -46,7 +46,7 @@ import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster';
     boundsUpdated (bounds) {
       this.bounds = bounds;
     },
-  }
+  },
 })
 export default class Map extends Vue {
   private url = "https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw";
@@ -56,23 +56,36 @@ export default class Map extends Vue {
   //@ts-ignore
   private map: LMap;
   private showParagraph = false;
+  private testFilter = false;
 
   //@ts-ignore
   @Prop() restaurants: Restaurant[];
 
   mounted(): void {
+    this.$nextTick(() => {
+      (this.$refs.cluster as any).mapObject.options.iconCreateFunction = this.test;
+    })
     delete Icon.Default.prototype._getIconUrl
     Icon.Default.imagePath = '/';
     Icon.Default.mergeOptions({
-        iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-        iconUrl: require('leaflet/dist/images/marker-icon.png'),
-        shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+        iconRetinaUrl: require('../assets/orange_carrot.png'),
+        iconUrl: require('../assets/orange_carrot.png'),
+        //shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
     });
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(this.setPosition);
     }
   }
 
+  private test(cluster: any): void {
+    console.log("here")
+    let childCount = cluster.getChildCount();
+
+    let html = '<div class="carrot">' + childCount+ '</div>';
+
+		return new DivIcon({ html, className: 'marker-cluster', iconSize: new Point(40, 40) });
+	
+  }
 
   private get restaurantList(): Restaurant[] {
     let temp = this.restaurants.filter(restaurant => restaurant.location !== null);
@@ -87,7 +100,7 @@ export default class Map extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style lang="scss">
 @import "~leaflet/dist/leaflet.css";
 @import "~leaflet.markercluster/dist/MarkerCluster.css";
 @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
@@ -95,4 +108,20 @@ export default class Map extends Vue {
     width: 100vw;
     height: 100vh;
   }
+
+  .carrot {
+    background-image: url("../assets/cluster.png");
+    line-height: 32px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: scale(1.5);
+  }
+
+  .marker-cluster {
+    height: 34px !important;
+    width: 34px !important;
+    font: 12px !important;
+  }
+
 </style>

@@ -17,8 +17,8 @@
         </div>
       </transition>
     </div>
-
-    <Map :restaurants="restaurantList"></Map>
+    <SearchBar class="app__search_bar" v-model="keywords"></SearchBar>
+    <Map :restaurants="restaurantArray"></Map>
   </div>
 </template>
 
@@ -26,22 +26,34 @@
 import { Component, Vue } from 'vue-property-decorator';
 import Map from './components/Map.vue';
 import { Restaurant } from './Restaurant';
+import SearchBar from './components/SearchBar.vue';
 
-@Component({
+@Component<App>({
   components: {
     Map,
+    SearchBar,
   },
-  data() {
-    return {
-
-    };
+  watch: {
+    keywords: function(newVal): void {
+      this.restaurantArray = this.restaurantList.filter(restaurant => {
+        if (restaurant.title.toLowerCase().includes(newVal.toLowerCase())) {
+          return true;
+        } else if (restaurant.address.toLowerCase().includes(newVal.toLowerCase())) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+    }
   }
 })
 export default class App extends Vue {
   private restaurantList: Restaurant[] = [];
+  private restaurantArray: Restaurant[] = [];
   private timeout = 0;
   private showInformation = false;
   private content = 0;
+  private keywords = "";
 
   private getRestaurants(): Promise<Restaurant[]> {
     return fetch('https://akalhainen.me/ruokalistat/restaurants.json')
@@ -67,6 +79,7 @@ export default class App extends Vue {
                 restaurant.lunchUrl
             )
             this.restaurantList.push(newRestaurant);
+            this.restaurantArray.push(newRestaurant)
         })
     });
 
@@ -83,7 +96,14 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-.app__info {
+
+html {
+  overflow: hidden;
+}
+
+.app {
+
+  &__info {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -118,6 +138,16 @@ export default class App extends Vue {
     &__content {
         padding: 5px 10px;
     }
+  }
+
+  &__search_bar {
+    position: absolute;
+    bottom: 15px;
+    width: calc(100vw - 20px);
+    height: 30px;
+    margin: 0 10px;
+    z-index: 99999;
+  }
 }
 
 body {
