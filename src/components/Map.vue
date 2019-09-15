@@ -81,7 +81,7 @@ export default class Map extends Vue {
     console.log("here")
     let childCount = cluster.getChildCount();
 
-    let html = '<div class="carrot">' + childCount+ '</div>';
+    let html = '<div class="carrot"></div>';
 
 		return new DivIcon({ html, className: 'marker-cluster', iconSize: new Point(40, 40) });
 	
