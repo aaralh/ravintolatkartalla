@@ -71,6 +71,8 @@ interface FoodMenu {
                             case "hel":
                                 this.parseHel(menu);
                                 break;
+                            case "unica":
+                                this.parseUnica(menu);
                         }
                     });
                 } else {
@@ -295,6 +297,19 @@ export default class Popup extends Vue {
         this.hasTime = false;
         if (this.lunchMenu.length < 1) {
             this.hasMenu = false;
+        }
+    }
+
+    private parseUnica(menuData: any): void {
+        let {menu, openingHours} = menuData;
+        this.lunchMenu = menu;
+        this.lunchTime = openingHours;
+        if (this.lunchMenu.length === 0) {
+            this.hasMenu = false;
+        }
+        
+        if (this.lunchTime === "") {
+            this.hasTime = false;
         }
     }
 }
