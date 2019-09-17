@@ -78,12 +78,11 @@ export default class Map extends Vue {
   }
 
   private test(cluster: any): void {
-    console.log("here")
     let childCount = cluster.getChildCount();
 
     let html = '<div class="carrot"></div>';
 
-		return new DivIcon({ html, className: 'marker-cluster', iconSize: new Point(40, 40) });
+		return new DivIcon({ html, className: 'marker-cluster', iconSize: new Point(50, 50) });
 	
   }
 
@@ -115,13 +114,19 @@ export default class Map extends Vue {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    transform: scale(1.5);
+    height: 52px !important;
+    width: 52px !important;
   }
 
   .marker-cluster {
     height: 34px !important;
     width: 34px !important;
     font: 12px !important;
+  }
+
+  .leaflet-marker-icon {
+    height: 40px !important;
+    width: 40px !important;
   }
 
 </style>
