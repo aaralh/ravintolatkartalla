@@ -24,7 +24,7 @@
       </div>
     </div>
     <SearchBar class="app__search_bar" v-model="keywords"></SearchBar>
-    <Map :restaurants="restaurantArray"></Map>
+    <Map ref="map" :boundsProp="bounds" :restaurants="restaurantArray"></Map>
   </div>
 </template>
 
@@ -33,6 +33,9 @@ import { Component, Vue } from 'vue-property-decorator';
 import Map from './components/Map.vue';
 import { Restaurant } from './Restaurant';
 import SearchBar from './components/SearchBar.vue';
+import RestaurantMarker from './components/RestaurantMarker.vue';
+
+declare const L: any;
 
 @Component<App>({
   components: {
@@ -42,6 +45,9 @@ import SearchBar from './components/SearchBar.vue';
   watch: {
     keywords: function(newVal): void {
       this.restaurantArray = this.restaurantList.filter(restaurant => {
+        if (!restaurant.title || !restaurant.address) {
+          return false;
+        }
         if (restaurant.title.toLowerCase().includes(newVal.toLowerCase())) {
           return true;
         } else if (restaurant.address.toLowerCase().includes(newVal.toLowerCase())) {
@@ -50,6 +56,32 @@ import SearchBar from './components/SearchBar.vue';
           return false;
         }
       })
+      this.$nextTick(() => {
+        let markerClusterGroup = L.markerClusterGroup();
+        for (let marker of ((this.$refs.map as Map).markers as RestaurantMarker[])) {
+          markerClusterGroup.addLayer(marker.marker);
+        }
+        console.log(markerClusterGroup)
+        let bounds = markerClusterGroup.getBounds();
+        console.log(bounds);
+        this.bounds = bounds;
+      })
+      /* this.$nextTick(() => {
+        setTimeout(() => {
+          console.log(this.$refs.marker)
+          let markers = MarkerClusterGroup();
+          for (let marker of (this.$refs.marker as RestaurantMarker[])) {
+            console.log(marker)
+            //markers.push(marker.marker);
+          }
+          console.log(markers)
+        }, 0)
+        
+      })
+      let markers = MarkerClusterGroup();
+      for(let i = 0; i < m.length; i++){
+          markers.addLayer(m[i]);
+      } */
     }
   }
 })
@@ -60,6 +92,7 @@ export default class App extends Vue {
   private showInformation = false;
   private content = 0;
   private keywords = "";
+  private bounds = null;
 
   private getRestaurants(): Promise<Restaurant[]> {
     return fetch('https://akalhainen.me/ruokalistat/restaurants.json')

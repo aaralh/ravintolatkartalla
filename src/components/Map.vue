@@ -5,13 +5,14 @@
       :zoom="zoom"
       :center="center"
       :options="options"
+      :bounds="bounds"
       @update:zoom="zoomUpdated"
       @update:center="centerUpdated"
       @update:bounds="boundsUpdated"
     >
       <LTileLayer :url="url"/>
       <Vue2LeafletMarkerCluster ref="cluster">
-        <RestaurantMarker v-for="restaurant in restaurantList"
+        <RestaurantMarker ref="restaurant_marker" v-for="restaurant in restaurantList"
           :key="restaurant.title"
           :restaurant="restaurant">
         </RestaurantMarker>
@@ -48,6 +49,11 @@ import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster';
       this.bounds = bounds;
     },
   },
+  watch: {
+    boundsProp: function(bounds) {
+      this.bounds = bounds;
+    },
+  },
 })
 export default class Map extends Vue {
   private url = "https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw";
@@ -64,6 +70,7 @@ export default class Map extends Vue {
 
   //@ts-ignore
   @Prop() restaurants: Restaurant[];
+  @Prop() boundsProp: any;
 
   mounted(): void {
     this.$nextTick(() => {
@@ -81,6 +88,10 @@ export default class Map extends Vue {
     }
   }
 
+  public get markers(): any {
+    return this.$refs.restaurant_marker;
+  }
+
   private test(cluster: any): void {
     let childCount = cluster.getChildCount();
 
@@ -91,7 +102,7 @@ export default class Map extends Vue {
   }
 
   private get restaurantList(): Restaurant[] {
-    let temp = this.restaurants.filter(restaurant => restaurant.location !== null);
+    let temp = this.restaurants.filter(restaurant => restaurant.location);
     return temp;
   }
 
