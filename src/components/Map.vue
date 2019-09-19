@@ -4,6 +4,7 @@
       style="height: 100%; width: 100%"
       :zoom="zoom"
       :center="center"
+      :options="options"
       @update:zoom="zoomUpdated"
       @update:center="centerUpdated"
       @update:bounds="boundsUpdated"
@@ -57,6 +58,9 @@ export default class Map extends Vue {
   private map: LMap;
   private showParagraph = false;
   private testFilter = false;
+  private options = {
+    zoomControl: false,
+  }
 
   //@ts-ignore
   @Prop() restaurants: Restaurant[];
