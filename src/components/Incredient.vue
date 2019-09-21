@@ -3,12 +3,6 @@
     <div class="incredient__container" :class="{'expanded' : showFullIncredients}">
         <div class="incredient__ingredients__item" v-for="ingredient in item.Components" :key="ingredient" v-html="ingredient"></div>
     </div>
-    <div v-if="!showFullIncredients" class="incredient__container__button" @click="showFullIncredients = !showFullIncredients">
-        Näytä enemmän
-    </div>
-    <div v-else class="incredient__container__button" @click="showFullIncredients = !showFullIncredients">
-        Näytä vähemmän
-    </div>
   </div>
 </template>
 
@@ -23,7 +17,7 @@ interface FoodMenu {
 
 @Component
 export default class Incredient extends Vue {
-    private showFullIncredients = false;
+    private showFullIncredients = true;
     //@ts-ignore
     @Prop() item: FoodMenu;
 

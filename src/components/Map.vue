@@ -1,6 +1,7 @@
 <template>
   <div class="map">
     <LMap
+      ref="map"
       style="height: 100%; width: 100%"
       :zoom="zoom"
       :center="center"
@@ -17,6 +18,7 @@
           :restaurant="restaurant">
         </RestaurantMarker>
       </Vue2LeafletMarkerCluster>
+      <LMarker ref="userLocation" v-if="accessUserLocation" :lat-lng="userLocation" ></LMarker>
     </LMap>
   </div>
 </template>
@@ -29,12 +31,15 @@ import {LMap, LTileLayer, LMarker, LPopup} from 'vue2-leaflet'
 import { Restaurant } from '../Restaurant';
 import RestaurantMarker from './RestaurantMarker.vue';
 //@ts-ignore
+import { latLng } from "leaflet";
+//@ts-ignore
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster';
 
 @Component<Map>({
   components: {
     LMap,
     LTileLayer,
+    LMarker,
     RestaurantMarker,
     Vue2LeafletMarkerCluster,
   },
@@ -67,6 +72,8 @@ export default class Map extends Vue {
   private options = {
     zoomControl: false,
   }
+  private accessUserLocation = false;
+  private userLocation: any = null
 
   //@ts-ignore
   @Prop() restaurants: Restaurant[];
@@ -85,8 +92,8 @@ export default class Map extends Vue {
     delete Icon.Default.prototype._getIconUrl
     Icon.Default.imagePath = '/';
     Icon.Default.mergeOptions({
-        iconRetinaUrl: require('../assets/orange_carrot.png'),
-        iconUrl: require('../assets/orange_carrot.png'),
+        iconRetinaUrl: require('../assets/carrot_with_shadow.png'),
+        iconUrl: require('../assets/carrot_with_shadow.png'),
         //shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
     });
   }
@@ -98,6 +105,45 @@ export default class Map extends Vue {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(this.setPosition);
     }
+    this.$refs.map.mapObject.locate({
+        watch:true,
+        enableHighAccuracy:true
+      }).on("locationfound", (e: any) => {
+        this.userLocation = this.convertLatLng(e.latitude, e.longitude)
+        if (!this.accessUserLocation) {
+          this.accessUserLocation = true;
+          this.$nextTick(() => {
+            let userMarker = this.$refs.userLocation.mapObject;
+            let myIconReplc = L.Icon.extend({
+              options: {
+                  iconUrl: require("../assets/location.png"),
+                  iconSize: [20,20],
+                  //shadowUrl: "../resources/img/map/icons/shadow.png",
+                  shadowAnchor: [8, 20],
+                  shadowSize: [25, 18],
+                  //iconSize: [20, 25],
+                  iconAnchor: [8, 30] // horizontal puis vertical
+              }
+            });
+            userMarker.setIcon(new myIconReplc)
+            console.log(userMarker)
+          })
+        }
+          /* if (!usermarker) {
+
+            if(this.profileData.avatar == "https://i.hizliresim.com/zJJ239.png"){
+              usermarker = new L.marker(e.latlng,{icon : ayi}).addTo(this.map);
+            }else if(this.profileData.avatar == "https://i.hizliresim.com/mJJrkP.png"){
+              usermarker = new L.marker(e.latlng,{icon : ironman}).addTo(this.map);
+            }else if(this.profileData.avatar == "https://i.hizliresim.com/vJJQpp.png"){
+              usermarker = new L.marker(e.latlng,{icon : dino}).addTo(this.map);
+            }else if(this.profileData.avatar == "https://i.hizliresim.com/zJJ2B9.png"){
+              usermarker = new L.marker(e.latlng,{icon : petyr}).addTo(this.map);
+            }
+          } else if(this.profileData.avatar == "https://i.hizliresim.com/zJJ239.png") {
+              usermarker.setLatLng(e.latlng);
+          } */
+      })
   }
 
   public get markers(): any {
@@ -122,6 +168,10 @@ export default class Map extends Vue {
     this.center = [position.coords.latitude, position.coords.longitude]
     this.zoom = 14;
   }
+
+  private convertLatLng(lat: number, lng: number): any {
+    return latLng(lat, lng);
+  }
 }
 </script>
 
@@ -137,7 +187,7 @@ export default class Map extends Vue {
   }
 
   .carrot {
-    background-image: url("../assets/cluster.png");
+    background-image: url("../assets/cluster_with_shadow.png");
     line-height: 32px;
     background-size: cover;
     background-repeat: no-repeat;

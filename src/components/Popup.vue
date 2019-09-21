@@ -1,11 +1,10 @@
 <template>
   <div class="popup">
-      <div class="popup__label">{{ title }}</div>
-      <div class="popup__label">Osoite: {{ restaurant.address }}</div>
-      <div v-if="hasTime" class="popup__label">Lounasaika: {{ lunchTime }}</div>
-      <div v-else class="popup__label">Lounasaika: Ei lounasaikaa saatavilla</div>
+      <div v-if="hasTime" class="popup__label__lunchtime">Lounasaika: {{ lunchTime }}</div>
+      <div class="popup__label__title">{{ title }}</div>
+      <div class="popup__label__address">Osoite: {{ restaurant.address }}</div>
       <div v-if="hasMenu" class="popup__menu">
-            <div class="popup__menu__item__labels">
+            <!-- <div class="popup__menu__item__labels">
                 <div class="">Nimi</div>
                 <div class="">Ainekset</div>
                 <div class="">Hinta</div>
@@ -16,10 +15,8 @@
                     <Incredient :item="item"></Incredient>
                 </div>
                 <div class="popup__menu__item__price">{{ item.Price }}</div>
-            </div>
-      </div>
-      <div v-else>
-          <div class="popup__label">Ei ruokalistaa saatavilla</div>
+            </div> -->
+            <AccordionItem :lunchMenuItem="item" v-for="item in lunchMenu" :key="item.Name"></AccordionItem>
       </div>
       <div v-if="isLoading" class="popup__loading">
           <i class="fa fa-spinner fa-spin"></i>
@@ -31,6 +28,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Restaurant } from '../Restaurant';
 import Incredient from './Incredient.vue';
+import AccordionItem from './AccordionItem.vue';
 
 interface FoodMenu {
     Price: string,
@@ -41,6 +39,7 @@ interface FoodMenu {
 @Component<Popup>({
     components: {
         Incredient,
+        AccordionItem,
     },
     watch: {
         loadMenu: function(newVal, oldVal) {
@@ -316,10 +315,27 @@ export default class Popup extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style lang="scss">
 .popup {
     height: 100%;
     width: 100%;
+
+    &__label {
+        &__title {
+            font-size: 18px;
+            color: #383838;
+        }
+
+        &__address {
+            font-size: 12px;
+            color: #7a7a7a;
+        }
+
+        &__lunchtime {
+            color: #595959;
+            font-size: 10px;
+        }
+    }
     &__menu {
         display: grid;
         grid-template-columns: 1fr;
@@ -327,8 +343,6 @@ export default class Popup extends Vue {
         grid-row-gap: 15px;
         margin-top: 5px;
         max-height: 80vh;
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
         overflow-x: hidden;
 
         &__item {
@@ -336,6 +350,11 @@ export default class Popup extends Vue {
             grid-template-columns: 33% 33% 33%;
             grid-column-gap: 5px;
             word-break: break-word;
+
+            &__title {
+                font-size: 14px;
+                color: #383838;
+            }
 
             &__labels {
                 display: grid;
@@ -353,5 +372,9 @@ export default class Popup extends Vue {
             font-size: 30px;
         }
     }
+}
+
+a.leaflet-popup-close-button {
+    color: #a5c996 !important;
 }
 </style>
