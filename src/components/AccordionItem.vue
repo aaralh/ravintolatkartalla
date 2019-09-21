@@ -4,7 +4,10 @@
             <div class="accordion_item__header__icon" :class="{ 'open' : isOpen }">
                 <img src="../assets/arrow.png">
             </div>
-            <div class="accordion_item__header__title">{{ lunchMenuItem.Name }}</div>
+            <div class="accordion_item__header__title">
+                <div class="title">{{ lunchMenuItem.Name }}</div>
+                <div class="price">{{ lunchMenuItem.Price }}</div>
+            </div>
         </div>
         <transition name="accordion"
             v-on:before-enter="beforeEnter" v-on:enter="enter"
@@ -50,8 +53,8 @@ export default class AccordionItem extends Vue {
 
             &__contents {
                 transition-duration: 0.3s;
-                //transition: 150ms ease-out;
                 overflow: hidden;
+                padding-left: 16px;
             }
             &__header {
                 display: flex;
@@ -59,9 +62,18 @@ export default class AccordionItem extends Vue {
                 cursor: pointer;
 
                 &__title {
-                    margin-left: 5px;
-                    font-size: 14px;
+                    display: flex;
+                    flex-direction: column;
                     color: #383838;
+                    margin-left: 3px;
+                    & > .title {
+                        font-size: 14px;
+                    }
+
+                    & > .price {
+                        font-size: 11px;
+                        color: #7a7a7a;
+                    }
                 }
 
                 &__icon {

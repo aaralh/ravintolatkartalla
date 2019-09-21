@@ -35,6 +35,9 @@ import { latLng } from "leaflet";
 //@ts-ignore
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster';
 
+// Declare leaflet L.
+declare const L: any;
+
 @Component<Map>({
   components: {
     LMap,
@@ -94,7 +97,7 @@ export default class Map extends Vue {
     Icon.Default.mergeOptions({
         iconRetinaUrl: require('../assets/carrot_with_shadow.png'),
         iconUrl: require('../assets/carrot_with_shadow.png'),
-        //shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+        shadowUrl: '',
     });
   }
 
@@ -105,7 +108,7 @@ export default class Map extends Vue {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(this.setPosition);
     }
-    this.$refs.map.mapObject.locate({
+    (this.$refs.map as any).mapObject.locate({
         watch:true,
         enableHighAccuracy:true
       }).on("locationfound", (e: any) => {
@@ -113,7 +116,7 @@ export default class Map extends Vue {
         if (!this.accessUserLocation) {
           this.accessUserLocation = true;
           this.$nextTick(() => {
-            let userMarker = this.$refs.userLocation.mapObject;
+            let userMarker = (this.$refs.userLocation as any).mapObject;
             let myIconReplc = L.Icon.extend({
               options: {
                   iconUrl: require("../assets/location.png"),
@@ -125,24 +128,10 @@ export default class Map extends Vue {
                   iconAnchor: [8, 30] // horizontal puis vertical
               }
             });
-            userMarker.setIcon(new myIconReplc)
-            console.log(userMarker)
+            userMarker.setIcon(new myIconReplc);
+            (userMarker._icon as HTMLElement).classList.add("user_location");
           })
         }
-          /* if (!usermarker) {
-
-            if(this.profileData.avatar == "https://i.hizliresim.com/zJJ239.png"){
-              usermarker = new L.marker(e.latlng,{icon : ayi}).addTo(this.map);
-            }else if(this.profileData.avatar == "https://i.hizliresim.com/mJJrkP.png"){
-              usermarker = new L.marker(e.latlng,{icon : ironman}).addTo(this.map);
-            }else if(this.profileData.avatar == "https://i.hizliresim.com/vJJQpp.png"){
-              usermarker = new L.marker(e.latlng,{icon : dino}).addTo(this.map);
-            }else if(this.profileData.avatar == "https://i.hizliresim.com/zJJ2B9.png"){
-              usermarker = new L.marker(e.latlng,{icon : petyr}).addTo(this.map);
-            }
-          } else if(this.profileData.avatar == "https://i.hizliresim.com/zJJ239.png") {
-              usermarker.setLatLng(e.latlng);
-          } */
       })
   }
 
@@ -205,6 +194,11 @@ export default class Map extends Vue {
   .leaflet-marker-icon {
     height: 40px !important;
     width: 40px !important;
+  }
+
+  .user_location {
+    height: 27px !important;
+    width: 27px !important;
   }
 
 </style>
