@@ -72,10 +72,16 @@ export default class Map extends Vue {
   @Prop() restaurants: Restaurant[];
   @Prop() boundsProp: any;
 
-  mounted(): void {
-    this.$nextTick(() => {
-      (this.$refs.cluster as any).mapObject.options.iconCreateFunction = this.test;
-    })
+  created(): void {
+    let vh = window.innerHeight * 0.01;
+      // Set calculeted custom vh to the property to be used in css.
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    window.addEventListener('resize', () => {
+      let vh = window.innerHeight * 0.01;
+      // Set calculeted custom vh to the property to be used in css.
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    });
+
     delete Icon.Default.prototype._getIconUrl
     Icon.Default.imagePath = '/';
     Icon.Default.mergeOptions({
@@ -83,6 +89,12 @@ export default class Map extends Vue {
         iconUrl: require('../assets/orange_carrot.png'),
         //shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
     });
+  }
+
+  mounted(): void {
+    this.$nextTick(() => {
+      (this.$refs.cluster as any).mapObject.options.iconCreateFunction = this.test;
+    })
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(this.setPosition);
     }
@@ -121,6 +133,7 @@ export default class Map extends Vue {
   .map {
     width: 100vw;
     height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
   }
 
   .carrot {

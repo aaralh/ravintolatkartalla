@@ -61,27 +61,9 @@ declare const L: any;
         for (let marker of ((this.$refs.map as Map).markers as RestaurantMarker[])) {
           markerClusterGroup.addLayer(marker.marker);
         }
-        console.log(markerClusterGroup)
         let bounds = markerClusterGroup.getBounds();
-        console.log(bounds);
         this.bounds = bounds;
       })
-      /* this.$nextTick(() => {
-        setTimeout(() => {
-          console.log(this.$refs.marker)
-          let markers = MarkerClusterGroup();
-          for (let marker of (this.$refs.marker as RestaurantMarker[])) {
-            console.log(marker)
-            //markers.push(marker.marker);
-          }
-          console.log(markers)
-        }, 0)
-        
-      })
-      let markers = MarkerClusterGroup();
-      for(let i = 0; i < m.length; i++){
-          markers.addLayer(m[i]);
-      } */
     }
   }
 })
@@ -147,13 +129,12 @@ html {
     top: 10px;
     left: 10px;
     z-index: 99999;
-    background-color: #ffffff;
-    padding: 0 5px;
-    height: 70px;
-    width: 226px;
+    background-color: #ffffffbf;
+    height: 76px;
+    width: 218px;
 
     &__image {
-      height: 66px;
+      height: 76px;
     }
   }
 

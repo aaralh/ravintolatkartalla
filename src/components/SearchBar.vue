@@ -1,7 +1,7 @@
 <template>
   <div class="search_bar" :class="{ 'expanded' : open }">
       <div class="search_bar__container">
-        <input v-if="open" class="search_bar__container__input" v-model="keywords" placeholder="Hae ravintolaa nimellä tai osoitteella">
+        <input v-if="open" class="search_bar__container__input" :value="keywords" @input="keywords = $event.target.value" placeholder="Hae ravintolaa nimellä tai osoitteella">
         <div @click="open = !open" class="search_bar__container__icon">
             <i v-if="!open" class="fa fa-search" aria-hidden="true"></i>
             <i v-else class="fa fa-times" aria-hidden="true"></i>
@@ -56,6 +56,7 @@ export default class SearchBar extends Vue {
                 width: 32px;
                 right: 0px;
                 top: 0px;
+                cursor: pointer;
 
                 & > i {
                     position: absolute;
