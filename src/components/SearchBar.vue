@@ -1,7 +1,7 @@
 <template>
   <div class="search_bar" :class="{ 'expanded' : open }">
       <div class="search_bar__container">
-        <input v-if="open" class="search_bar__container__input" :value="keywords" @input="keywords = $event.target.value" placeholder="Hae ravintolaa nimellä tai osoitteella">
+        <input v-if="open" ref="search_input" class="search_bar__container__input" :value="keywords" @input="keywords = $event.target.value" placeholder="Hae ravintolaa nimellä tai osoitteella">
         <div @click="open = !open" class="search_bar__container__icon">
             <i v-if="!open" class="fa fa-search" aria-hidden="true"></i>
             <i v-else class="fa fa-times" aria-hidden="true"></i>
@@ -17,7 +17,14 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
     watch: {
         keywords: function(newVal: string): void {
             this.$emit("input", newVal);
-        }
+        },
+        open: function(newVal: boolean): void {
+            if (newVal) {
+                this.$nextTick(() => {
+                    (this.$refs.search_input as any).focus()
+                })
+            }
+        },
     }
 })
 export default class SearchBar extends Vue {

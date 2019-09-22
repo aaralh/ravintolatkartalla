@@ -61,6 +61,9 @@ declare const L: any;
     boundsProp: function(bounds) {
       this.bounds = bounds;
     },
+    zoomProp: function(zoom) {
+      this.zoom = zoom;
+    },
   },
 })
 export default class Map extends Vue {
@@ -81,6 +84,9 @@ export default class Map extends Vue {
   //@ts-ignore
   @Prop() restaurants: Restaurant[];
   @Prop() boundsProp: any;
+  //@ts-ignore
+  @Prop() zoomProp: number;
+
 
   created(): void {
     let vh = window.innerHeight * 0.01;
