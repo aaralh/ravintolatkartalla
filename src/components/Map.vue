@@ -1,38 +1,49 @@
 <template>
   <div class="map">
     <LMap
+      ref="map"
       style="height: 100%; width: 100%"
       :zoom="zoom"
       :center="center"
+      :options="options"
+      :bounds="bounds"
+      :minZoom="3"
       @update:zoom="zoomUpdated"
       @update:center="centerUpdated"
       @update:bounds="boundsUpdated"
     >
       <LTileLayer :url="url"/>
-      <Vue2LeafletMarkerCluster>
-        <RestaurantMarker v-for="restaurant in restaurantList"
+      <Vue2LeafletMarkerCluster ref="cluster">
+        <RestaurantMarker ref="restaurant_marker" v-for="restaurant in restaurantList"
           :key="restaurant.title"
           :restaurant="restaurant">
         </RestaurantMarker>
       </Vue2LeafletMarkerCluster>
+      <LMarker ref="userLocation" v-if="accessUserLocation" :lat-lng="userLocation" ></LMarker>
     </LMap>
   </div>
 </template>
 
 <script lang="ts">
 //@ts-ignore
-import { Icon } from "leaflet";
+import { Icon, DivIcon, Point } from "leaflet";
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import {LMap, LTileLayer, LMarker, LPopup} from 'vue2-leaflet'
 import { Restaurant } from '../Restaurant';
 import RestaurantMarker from './RestaurantMarker.vue';
 //@ts-ignore
+import { latLng } from "leaflet";
+//@ts-ignore
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster';
+
+// Declare leaflet L.
+declare const L: any;
 
 @Component<Map>({
   components: {
     LMap,
     LTileLayer,
+    LMarker,
     RestaurantMarker,
     Vue2LeafletMarkerCluster,
   },
@@ -46,7 +57,15 @@ import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster';
     boundsUpdated (bounds) {
       this.bounds = bounds;
     },
-  }
+  },
+  watch: {
+    boundsProp: function(bounds) {
+      this.bounds = bounds;
+    },
+    zoomProp: function(zoom) {
+      this.zoom = zoom;
+    },
+  },
 })
 export default class Map extends Vue {
   private url = "https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw";
@@ -56,26 +75,88 @@ export default class Map extends Vue {
   //@ts-ignore
   private map: LMap;
   private showParagraph = false;
+  private testFilter = false;
+  private options = {
+    zoomControl: false,
+  }
+  private accessUserLocation = false;
+  private userLocation: any = null
 
   //@ts-ignore
   @Prop() restaurants: Restaurant[];
+  @Prop() boundsProp: any;
+  //@ts-ignore
+  @Prop() zoomProp: number;
 
-  mounted(): void {
+
+  created(): void {
+    let vh = window.innerHeight * 0.01;
+      // Set calculeted custom vh to the property to be used in css.
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    window.addEventListener('resize', () => {
+      let vh = window.innerHeight * 0.01;
+      // Set calculeted custom vh to the property to be used in css.
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    });
+
     delete Icon.Default.prototype._getIconUrl
     Icon.Default.imagePath = '/';
     Icon.Default.mergeOptions({
-        iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-        iconUrl: require('leaflet/dist/images/marker-icon.png'),
-        shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+        iconRetinaUrl: require('../assets/carrot_with_shadow.png'),
+        iconUrl: require('../assets/carrot_with_shadow.png'),
+        shadowUrl: '',
     });
+  }
+
+  mounted(): void {
+    this.$nextTick(() => {
+      (this.$refs.cluster as any).mapObject.options.iconCreateFunction = this.test;
+    })
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(this.setPosition);
     }
+    (this.$refs.map as any).mapObject.locate({
+        watch:true,
+        enableHighAccuracy:true
+      }).on("locationfound", (e: any) => {
+        this.userLocation = this.convertLatLng(e.latitude, e.longitude)
+        if (!this.accessUserLocation) {
+          this.accessUserLocation = true;
+          this.$nextTick(() => {
+            let userMarker = (this.$refs.userLocation as any).mapObject;
+            let myIconReplc = L.Icon.extend({
+              options: {
+                  iconUrl: require("../assets/location.png"),
+                  iconSize: [20,20],
+                  //shadowUrl: "../resources/img/map/icons/shadow.png",
+                  shadowAnchor: [8, 20],
+                  shadowSize: [25, 18],
+                  //iconSize: [20, 25],
+                  iconAnchor: [8, 30] // horizontal puis vertical
+              }
+            });
+            userMarker.setIcon(new myIconReplc);
+            (userMarker._icon as HTMLElement).classList.add("user_location");
+          })
+        }
+      })
   }
 
+  public get markers(): any {
+    return this.$refs.restaurant_marker;
+  }
+
+  private test(cluster: any): void {
+    let childCount = cluster.getChildCount();
+
+    let html = '<div class="carrot"></div>';
+
+		return new DivIcon({ html, className: 'marker-cluster', iconSize: new Point(50, 50) });
+	
+  }
 
   private get restaurantList(): Restaurant[] {
-    let temp = this.restaurants.filter(restaurant => restaurant.location !== null);
+    let temp = this.restaurants.filter(restaurant => restaurant.location);
     return temp;
   }
 
@@ -83,16 +164,48 @@ export default class Map extends Vue {
     this.center = [position.coords.latitude, position.coords.longitude]
     this.zoom = 14;
   }
+
+  private convertLatLng(lat: number, lng: number): any {
+    return latLng(lat, lng);
+  }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style lang="scss">
 @import "~leaflet/dist/leaflet.css";
 @import "~leaflet.markercluster/dist/MarkerCluster.css";
 @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
   .map {
     width: 100vw;
     height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
   }
+
+  .carrot {
+    background-image: url("../assets/cluster_with_shadow.png");
+    line-height: 32px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 52px !important;
+    width: 52px !important;
+  }
+
+  .marker-cluster {
+    height: 34px !important;
+    width: 34px !important;
+    font: 12px !important;
+  }
+
+  .leaflet-marker-icon {
+    height: 40px !important;
+    width: 40px !important;
+  }
+
+  .user_location {
+    height: 27px !important;
+    width: 27px !important;
+  }
+
 </style>

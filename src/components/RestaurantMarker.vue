@@ -1,12 +1,10 @@
 <template>
-    <div class="">
-        <LMarker :lat-lng="convertLatLng(restaurant.location)"
-            @click="clickHandler">
-            <l-popup>
-                <Popup :restaurant="restaurant" :loadMenu="loadMenu"></Popup>
-            </l-popup>
-        </LMarker>
-    </div>
+    <LMarker ref="marker" :lat-lng="convertLatLng(restaurant.location)"
+        @click="clickHandler">
+        <l-popup>
+            <Popup :restaurant="restaurant" :loadMenu="loadMenu"></Popup>
+        </l-popup>
+    </LMarker>
 </template>
 
 <script lang="ts">
@@ -31,7 +29,10 @@ export default class RestaurantMarker extends Vue {
     private loadMenu = false;
 
     mounted(): void {
+    }
 
+    public get marker(): any {
+        return (this.$refs.marker as any).mapObject;
     }
 
     private clickHandler(): void {
