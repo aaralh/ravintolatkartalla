@@ -169,8 +169,8 @@ html {
       cursor: pointer;
       bottom: 66px;
       right: 10px;
-      height: 30px;
-      width: 30px;
+      height: 32px;
+      width: 32px;
 
        & > img {
         height: 90%;
@@ -191,8 +191,8 @@ html {
       cursor: pointer;
       bottom: 106px;
       right: 10px;
-      height: 30px;
-      width: 30px;
+      height: 32px;
+      width: 32px;
 
       & > img {
         height: 90%;
