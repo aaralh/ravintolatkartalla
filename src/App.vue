@@ -208,10 +208,16 @@ html {
     z-index: 99999;
     background-color: #ffffffbf;
     height: 76px;
-    width: 218px;
+    width: 228px;
 
     &__image {
       height: 76px;
+      padding: 0 5px;
+
+      & > img {
+        height: 100%;
+        width: 100%;
+      }
     }
   }
 
