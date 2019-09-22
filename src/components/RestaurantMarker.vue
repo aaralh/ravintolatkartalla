@@ -46,6 +46,13 @@ export default class RestaurantMarker extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style lang="scss">
+    .leaflet-popup-content-wrapper {
+        background: rgba(255, 255, 255, 0.8) !important;
+    }
+
+    .leaflet-popup-tip {
+        background: rgba(255, 255, 255, 0.8) !important;
+    }
 
 </style>

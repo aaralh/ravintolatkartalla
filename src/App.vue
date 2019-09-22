@@ -5,6 +5,12 @@
         <img src="./assets/header.png"/>
       </div>
     </div>
+    <div v-if="!isMobile" @click="zoomMapIn" class="app__zoom_in">
+      <img src="./assets/plus.png" alt="zoom in">
+    </div>
+    <div v-if="!isMobile" @click="zoomMapOut" class="app__zoom_out">
+      <img src="./assets/minus.png" alt="zoom out">
+    </div>
     <div class="app__info"
       @click="informationClickHanler">
       <div class="app__info__container" :class="{'extended' : showInformation}">
@@ -127,6 +133,14 @@ export default class App extends Vue {
       console.log("Deploying update..")
       //window.location.reload(true);
   };
+
+  private zoomMapIn(): void {
+    (this.$refs.map as Map).zoomIn();
+  }
+
+  private zoomMapOut(): void {
+    (this.$refs.map as Map).zoomOut();
+  }
 }
 </script>
 
@@ -137,6 +151,54 @@ html {
 }
 
 .app {
+
+  &__zoom {
+
+
+    &_in {
+      position: absolute;
+      border: 1px solid lightgray;
+      background-color: whitesmoke;
+      color: #333333;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      cursor: pointer;
+      bottom: 107px;
+      right: 10px;
+      height: 30px;
+      width: 30px;
+
+       & > img {
+        height: 90%;
+        width: 90%;
+      }
+    }
+
+    &_out {
+      position: absolute;
+      border: 1px solid lightgray;
+      background-color: whitesmoke;
+      color: #333333;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      cursor: pointer;
+      bottom: 147px;
+      right: 10px;
+      height: 30px;
+      width: 30px;
+
+      & > img {
+        height: 90%;
+        width: 90%;
+      }
+    }
+  }
 
   &__header {
     position: absolute;
@@ -224,6 +286,6 @@ body {
   opacity: 0;
 }
 .fa {
-  color: #a5c996;
+  color: #87b877;
 }
 </style>

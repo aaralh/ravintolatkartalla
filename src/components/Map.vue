@@ -168,6 +168,14 @@ export default class Map extends Vue {
   private convertLatLng(lat: number, lng: number): any {
     return latLng(lat, lng);
   }
+
+  public zoomIn(): void {
+    this.zoom++;
+  }
+
+  public zoomOut(): void {
+    this.zoom--;
+  }
 }
 </script>
 
