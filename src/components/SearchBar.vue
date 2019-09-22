@@ -38,7 +38,7 @@ export default class SearchBar extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
     .search_bar {
-        background-color: whitesmoke;
+        background-color: rgba(255, 255, 255, 0.8);
         width: 32px;
         transition: width .1s linear;
         border: 1px solid lightgray;
@@ -64,7 +64,6 @@ export default class SearchBar extends Vue {
                 right: 0px;
                 top: 0px;
                 cursor: pointer;
-                background-color: whitesmoke;
 
                 & > i {
                     position: absolute;

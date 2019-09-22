@@ -17,13 +17,19 @@
       <div class="app__info__container" :class="{'extended' : showInformation}">
         <transition name="fade">
           <div v-show="showInformation" class="app__info__container__content">
-            <p>Opiskelijaravintolat sivulta löydät kaikki Opiskelijaravintolat koko Suomesta. 
-              Ravintolan merkkiä klikkaamalla näet kyseisen ravintolan lounaslistan sekä aukioloajat. 
-              Rajapintojen puutteiden vuoksi joidenkin ravintoloiden ruokalistoja tai lounasaikoja ei välttämättä ole saatavilla.
+            <p class="bold">Miten kartta toimii?</p>
+            <p>
+              Kartta näyttää kaikki Suomen opiskelijaravintolat. Pohjadata on noudettu Kelan sivuilta ja siinä voi olla puutteita.
+              Joillakin ravintoloilla nähtävillä on myös ruokalistat ja aukioloajat (kaikista ravintoloista niitä ei ole ollut saatavilla).
             </p>
             <br>
-            <p class="app__info__container__content__disclaimer">
-              Ravintoloiden sijainti kartalla on suuntaa antava ja se pohjautuu ravintoloiden Kelalle antamaan osoitteistoon.
+            <p class="bold">Mikä ihmeen opiskelijaravintolat kartalla?</p>
+            <p>
+              Sovellus syntyi puhtaasta tarpeesta ymmärtää missä sijaitsee opiskelijaravintoloita itselle tuntemattomassa kaupungissa.
+              Kelan sivuilta löytyi vain ravintolalista, josta ei näin kaupunkiin vasta muuttaneelle ollut mitään hyötyä.
+              Teemme tätä puhtaasti harrastushengessä ja olemme työssäkäyviä opiskelijoita,
+              joten korjailemme ja kehitämme juttuja omien aikataulujemme/kiinnostuksemme mukaan.
+              Mailia voi laittaa osoitteeseen: <a href="mailto:support@opiskelijaravintolat.fi">support@opiskelijaravintolat.fi</a>
             </p>
           </div>
         </transition>
@@ -151,6 +157,10 @@ html {
   overflow: hidden;
 }
 
+.bold {
+  font-weight: bold;
+}
+
 .app {
 
   &__zoom {
@@ -159,7 +169,7 @@ html {
     &_in {
       position: absolute;
       border: 1px solid lightgray;
-      background-color: whitesmoke;
+      background-color: rgba(255, 255, 255, 0.8);
       color: #333333;
       display: flex;
       flex-direction: column;
@@ -181,7 +191,7 @@ html {
     &_out {
       position: absolute;
       border: 1px solid lightgray;
-      background-color: whitesmoke;
+      background-color: rgba(255, 255, 255, 0.8);
       color: #333333;
       display: flex;
       flex-direction: column;
@@ -226,7 +236,7 @@ html {
     bottom: 147px;
     right: 10px;
     border: 1px solid lightgray;
-    background-color: whitesmoke;
+    background-color: rgba(255, 255, 255, 0.8);
     color: #333333;
     display: flex;
     flex-direction: column;
@@ -264,11 +274,11 @@ html {
       &.extended {
         transition: all .3s;
         width: calc(100vw - 20px);
-        height: 240px;
+        height: 400px;
         max-width: 650px;
         max-height: 100%;
         @media screen and ( min-width: 650px ) {
-          max-height: 200px;
+          max-height: 260px;
         }
       }
     }
