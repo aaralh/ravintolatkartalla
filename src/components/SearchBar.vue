@@ -60,7 +60,7 @@ export default class SearchBar extends Vue {
                 position: absolute;
                 font-size: 18px;
                 height: 100%;
-                width: 32px;
+                width: 30px;
                 right: 0px;
                 top: 0px;
                 cursor: pointer;
