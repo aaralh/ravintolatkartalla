@@ -12,6 +12,7 @@
       <img src="./assets/minus.png" alt="zoom out">
     </div>
     <div class="app__info"
+      :class="{'lower' : isMobile }"
       @click="informationClickHanler">
       <div class="app__info__container" :class="{'extended' : showInformation}">
         <transition name="fade">
@@ -228,6 +229,10 @@ html {
     z-index: 99999;
     cursor: pointer;
     overflow: hidden;
+
+    &.lower {
+      bottom: 66px;
+    }
 
     &__container {
       position: relative;
