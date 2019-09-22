@@ -7,6 +7,7 @@
       :center="center"
       :options="options"
       :bounds="bounds"
+      :minZoom="3"
       @update:zoom="zoomUpdated"
       @update:center="centerUpdated"
       @update:bounds="boundsUpdated"

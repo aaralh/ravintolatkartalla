@@ -9,7 +9,7 @@
       @click="informationClickHanler">
       <div class="app__info__container" :class="{'extended' : showInformation}">
         <transition name="fade">
-          <div v-if="showInformation" class="app__info__container__content">
+          <div v-show="showInformation" class="app__info__container__content">
             <p>Opiskelijaravintolat sivulta löydät kaikki ravintolat koko Suomesta joihin Kela myöntää ateriatukea. 
               Ravintolan merkkiä klikkaamalla näet kyseisen ravintolat lounaslistan sekä aukioloajat. 
               Rajapintojen puutteiden vuoksi joidenkin ravintoloiden ruokalistoja tai lounasaikoja ei välttämättä ole saatavilla.
@@ -174,6 +174,7 @@ html {
       max-height: 30px;
       max-width: 30px;
       transition: all .3s;
+      overflow: hidden;
       &__icon {
         position: absolute;
         bottom: 6px;
@@ -182,6 +183,8 @@ html {
 
       &__content {
         padding: 5px 10px;
+        width: calc(100vw - 20px);
+        max-width: calc(650px - 20px);
       }
 
       &.extended {

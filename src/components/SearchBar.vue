@@ -64,6 +64,7 @@ export default class SearchBar extends Vue {
                 right: 0px;
                 top: 0px;
                 cursor: pointer;
+                background-color: whitesmoke;
 
                 & > i {
                     position: absolute;
