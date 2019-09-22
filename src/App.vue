@@ -166,7 +166,7 @@ html {
       align-items: center;
       z-index: 99999;
       cursor: pointer;
-      bottom: 107px;
+      bottom: 66px;
       right: 10px;
       height: 30px;
       width: 30px;
@@ -188,7 +188,7 @@ html {
       align-items: center;
       z-index: 99999;
       cursor: pointer;
-      bottom: 147px;
+      bottom: 106px;
       right: 10px;
       height: 30px;
       width: 30px;
@@ -216,7 +216,7 @@ html {
 
   &__info {
     position: absolute;
-    bottom: 66px;
+    bottom: 147px;
     right: 10px;
     border: 1px solid lightgray;
     background-color: whitesmoke;
