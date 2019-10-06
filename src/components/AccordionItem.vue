@@ -1,5 +1,5 @@
 <template>
-    <div class="accordion_item">
+    <div v-if="lunchMenuItem.Name" class="accordion_item">
         <div @click="isOpen = !isOpen" class="accordion_item__header">
             <div class="accordion_item__header__icon" :class="{ 'open' : isOpen }">
                 <img src="../assets/arrow.png">
