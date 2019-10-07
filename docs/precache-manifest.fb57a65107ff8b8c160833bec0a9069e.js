@@ -40,7 +40,7 @@ self.__precacheManifest = [
     "url": "css/app.acce249a.css"
   },
   {
-    "revision": "b9ee969c5d4b33bc2e80dd21e38759f3",
+    "revision": "efa42c359fb79d439afe892d0cdf8f2e",
     "url": "cookies.html"
   },
   {
