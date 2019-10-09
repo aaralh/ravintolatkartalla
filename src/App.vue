@@ -31,6 +31,8 @@
               joten korjailemme ja kehitämme juttuja omien aikataulujemme/kiinnostuksemme mukaan.
               Mailia voi laittaa osoitteeseen: <a href="mailto:support@opiskelijaravintolat.fi">support@opiskelijaravintolat.fi</a>
             </p>
+            <br>
+            <a href="./cookies.html">Lisätietoa sivulla olevista evästeistä</a>
           </div>
         </transition>
         <i class="fa fa-info app__info__container__icon"></i>
@@ -274,11 +276,11 @@ html {
       &.extended {
         transition: all .3s;
         width: calc(100vw - 20px);
-        height: 400px;
+        height: 450px;
         max-width: 650px;
         max-height: 100%;
         @media screen and ( min-width: 650px ) {
-          max-height: 260px;
+          max-height: 300px;
         }
       }
     }
