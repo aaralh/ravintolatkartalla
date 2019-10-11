@@ -40,7 +40,7 @@ self.__precacheManifest = [
     "url": "css/app.063661cd.css"
   },
   {
-    "revision": "efa42c359fb79d439afe892d0cdf8f2e",
+    "revision": "761411f989683723fd76c3088d8124dc",
     "url": "cookies.html"
   },
   {
