@@ -68,7 +68,7 @@ declare const L: any;
   },
 })
 export default class Map extends Vue {
-  private url = "https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw";
+  private url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   private zoom = 14;
   private center = [60.167255, 24.940523];
   private bounds = null;
@@ -79,6 +79,7 @@ export default class Map extends Vue {
   private options = {
     zoomControl: false,
   }
+  private attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
   private accessUserLocation = false;
   private userLocation: any = null
 
@@ -115,6 +116,7 @@ export default class Map extends Vue {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(this.setPosition);
     }
+    (this.$refs.map as any).mapObject.attributionControl.addAttribution(this.attribution);
     (this.$refs.map as any).mapObject.locate({
         watch:true,
         enableHighAccuracy:true
