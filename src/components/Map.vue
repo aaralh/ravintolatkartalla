@@ -68,7 +68,7 @@ declare const L: any;
   },
 })
 export default class Map extends Vue {
-  private url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+  private url = 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png';
   private zoom = 14;
   private center = [60.167255, 24.940523];
   private bounds = null;
