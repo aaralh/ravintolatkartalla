@@ -163,8 +163,15 @@ export default class Map extends Vue {
   }
 
   private setPosition(position: Position): void {
-    this.center = [position.coords.latitude, position.coords.longitude]
     this.zoom = 14;
+    setTimeout(() => {
+      (this.$refs.map as any).mapObject.setView([position.coords.latitude, position.coords.longitude], (this.$refs.map as any).mapObject.getZoom(), {
+        "animate": true,
+        "pan": {
+          "duration": 1
+        }
+      });
+    }, 500);
   }
 
   private convertLatLng(lat: number, lng: number): any {
