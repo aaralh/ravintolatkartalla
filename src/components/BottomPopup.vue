@@ -1,12 +1,12 @@
 <template>
-    <div class="bottom_popup" v-if="selectedRestaurants.length">
+    <div class="bottom_popup">
         <div class="bottom_popup__close" @click="handleClose()">
             <i class="fa fa-times" aria-hidden="true"></i>
         </div>
         <div class="bottom_popup__content">
-            <Carousel class="test" :perPage="1">
-                <Slide class="test" v-for="restaurant in selectedRestaurants" :key="restaurant.address">
-                    <RestaurantInfo :restaurant="restaurant" :loadMenu="true" :forceMenuLoad="true"></RestaurantInfo>
+            <Carousel class="full_height" :perPage="1">
+                <Slide class="full_height" v-for="restaurant in restaurants" :key="restaurant.address">
+                    <RestaurantInfo class="restaurant_info2" :restaurant="restaurant" :loadMenu="true" :forceMenuLoad="true"></RestaurantInfo>
                 </Slide>
             </Carousel>
         </div>
@@ -26,6 +26,19 @@ import { Carousel, Slide } from 'vue-carousel';
         Carousel,
         Slide,
     },
+    watch: {
+        selectedRestaurants(): void {
+            console.log(this.selectedRestaurants);
+            this.restaurants = this.selectedRestaurants.map(restaurant => new Restaurant(
+                restaurant.title,
+                restaurant.address,
+                restaurant.location,
+                restaurant.website,
+                restaurant.type,
+            ))
+            console.log(this.restaurants);
+        }
+    }
 })
 export default class BottomPopup extends Vue {
 
@@ -34,6 +47,7 @@ export default class BottomPopup extends Vue {
     private restaurants: Restaurant[] = [];
 
     public handleClose(): void {
+        this.restaurants = [];
         this.$store.commit("selectedRestaurants", []);
     }
 }
@@ -42,9 +56,15 @@ export default class BottomPopup extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 
-.test {
-    height: 100%;
-}
+    .full_height {
+        height: 100%;
+        max-width: 100vw;
+    }
+
+    .restaurant_info2 {
+        max-width: 94vw;
+    }
+    
 
     .bottom_popup {
         width: 100vw;

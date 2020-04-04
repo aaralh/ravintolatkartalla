@@ -38,7 +38,7 @@
 		<i class="fa fa-info app__info__container__icon"></i>
 	  </div>
 	</div>
-	<div class="app__favourites" @click="logFavourites()">
+	<div class="app__favourites" @click="openFavourites()">
 		<i class="fa fa-star"></i>
 	</div>
 	<SearchBar class="app__search_bar" v-model="keywords"></SearchBar>
@@ -128,8 +128,7 @@ export default class App extends Vue {
 	return check;
   }
 
-  private logFavourites(): void {
-	  console.log(getFavouriteRestaurants());
+  private openFavourites(): void {
 	  this.$store.commit("selectedRestaurants", getFavouriteRestaurants());
   }
 

@@ -104,6 +104,17 @@ export default class RestaurantInfo extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+
+.VueCarousel {
+    &-wrapper {
+        height: 100% !important; 
+    }
+
+    &-inner {
+        height: 100% !important;
+    }
+}
+
 .restaurant_info {
     height: 100%;
     width: 100%;
@@ -113,10 +124,16 @@ export default class RestaurantInfo extends Vue {
         &__title {
             font-size: 18px;
             color: #383838;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 75%;
         }
 
 		&__title_wrap {
 			display: flex;
+            max-width: 100vw;
 		}
 
 		&__favourite {

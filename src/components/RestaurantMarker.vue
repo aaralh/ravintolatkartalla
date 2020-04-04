@@ -1,9 +1,9 @@
 <template>
     <LMarker ref="marker" :lat-lng="convertLatLng(restaurant.location)"
         @click="clickHandler">
-        <l-popup>
+        <!-- <l-popup>
             <Popup :restaurant="restaurant" :loadMenu="loadMenu"></Popup>
-        </l-popup>
+        </l-popup> -->
     </LMarker>
 </template>
 
@@ -36,7 +36,8 @@ export default class RestaurantMarker extends Vue {
     }
 
     private clickHandler(): void {
-        this.loadMenu = true;
+        //this.loadMenu = true;
+        this.$store.commit("selectedRestaurants", [this.restaurant.toObject()]);
     }
 
     private convertLatLng(location: Restaurant["location"]): any {
