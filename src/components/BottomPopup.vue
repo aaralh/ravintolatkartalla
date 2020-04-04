@@ -3,7 +3,9 @@
         <div class="bottom_popup__close" @click="handleClose()">
             <i class="fa fa-times" aria-hidden="true"></i>
         </div>
-        <RestaurantInfo class="bottom_popup__content" :restaurant="selectedRestaurants[0]" :loadMenu="loadMenu" :forceMenuLoad="true"></RestaurantInfo> -->
+        <div class="bottom_popup__content">
+            <RestaurantInfo v-for="restaurant in selectedRestaurants" :key="restaurant.address" :restaurant="restaurant" :loadMenu="true" :forceMenuLoad="true"></RestaurantInfo>
+        </div>
     </div>
 </template>
 
@@ -16,39 +18,12 @@ import RestaurantInfo from './RestaurantInfo.vue';
     components: {
         RestaurantInfo,
     },
-    watch: {
-        selectedRestaurants(newVal): void {
-            console.log(this.loadMenu)
-            this.restaurants = [];
-            this.restaurants = this.selectedRestaurants.map(restaurant => new Restaurant(restaurant.title,
-                    restaurant.address,
-                    restaurant.location,
-                    restaurant.website,
-                    restaurant.type
-                )
-            )
-            if (this.restaurants.length) {
-                this.loadMenu = true;
-            } else {
-                this.loadMenu = false;
-            }
-            console.log(this.loadMenu)
-
-        }
-    }
 })
 export default class BottomPopup extends Vue {
 
     //@ts-ignore
     @Prop() selectedRestaurants: RestaurantObject[];
-
-    private loadMenu: boolean;
     private restaurants: Restaurant[] = [];
-
-    public created(): void {
-        console.log("here");
-        this.loadMenu = false;
-    }
 
     public handleClose(): void {
         this.$store.commit("selectedRestaurants", []);
