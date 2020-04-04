@@ -1,6 +1,14 @@
-interface Location {
+export interface Location {
     lat: string,
     lng: string,
+}
+
+export interface RestaurantObject {
+    location: Location,
+    type: string,
+    address: string,
+    website: string,
+    title: string,
 }
 
 declare const L: any;
@@ -69,5 +77,15 @@ export class Restaurant {
             return;
         }
         this._marker.addTo(this._map);
+    }
+
+    public toObject(): RestaurantObject {
+        return {
+            title: this._title,
+            address: this._address,
+            website: this._website,
+            type: this._type,
+            location: this._location,
+        }
     }
 }

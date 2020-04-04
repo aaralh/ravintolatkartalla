@@ -5,16 +5,16 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    unicafeMenu: undefined,
+    selectedRestaurants: [],
   },
   mutations: {
-    unicafeMenu(state, data): void {
-      state.unicafeMenu = data;
+    selectedRestaurants(state, data): void {
+      state.selectedRestaurants = data;
     },
   },
   getters: {
-    unicafeMenu(state): any {
-      return state.unicafeMenu;
+    selectedRestaurants(state): any {
+      return state.selectedRestaurants;
     },
   },
   actions: {
