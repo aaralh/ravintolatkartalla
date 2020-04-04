@@ -4,7 +4,11 @@
             <i class="fa fa-times" aria-hidden="true"></i>
         </div>
         <div class="bottom_popup__content">
-            <RestaurantInfo v-for="restaurant in selectedRestaurants" :key="restaurant.address" :restaurant="restaurant" :loadMenu="true" :forceMenuLoad="true"></RestaurantInfo>
+            <Carousel class="test" :perPage="1">
+                <Slide class="test" v-for="restaurant in selectedRestaurants" :key="restaurant.address">
+                    <RestaurantInfo :restaurant="restaurant" :loadMenu="true" :forceMenuLoad="true"></RestaurantInfo>
+                </Slide>
+            </Carousel>
         </div>
     </div>
 </template>
@@ -13,10 +17,14 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Restaurant, RestaurantObject } from '../Restaurant';
 import RestaurantInfo from './RestaurantInfo.vue';
+//@ts-ignore
+import { Carousel, Slide } from 'vue-carousel';
 
 @Component<BottomPopup>({
     components: {
         RestaurantInfo,
+        Carousel,
+        Slide,
     },
 })
 export default class BottomPopup extends Vue {
@@ -34,6 +42,10 @@ export default class BottomPopup extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 
+.test {
+    height: 100%;
+}
+
     .bottom_popup {
         width: 100vw;
         height: 60vh;
@@ -48,7 +60,7 @@ export default class BottomPopup extends Vue {
         &__close {
             height: 32px;
             width: 32px;
-
+            z-index: 999999;
             position: absolute;
             top: 6px;
             right: 7px;
@@ -60,6 +72,7 @@ export default class BottomPopup extends Vue {
 
         &__content {
             padding: 10px;
+            height: 100%;
         }
     }
 
