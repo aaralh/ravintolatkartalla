@@ -29,12 +29,13 @@
 import { Icon, DivIcon, Point } from "leaflet";
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import {LMap, LTileLayer, LMarker, LPopup} from 'vue2-leaflet'
-import { Restaurant } from '../Restaurant';
+import { Restaurant, RestaurantObject } from '../Restaurant';
 import RestaurantMarker from './RestaurantMarker.vue';
 //@ts-ignore
 import { latLng } from "leaflet";
 //@ts-ignore
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster';
+import { mapGetters } from 'vuex';
 
 // Declare leaflet L.
 declare const L: any;
@@ -65,7 +66,21 @@ declare const L: any;
     zoomProp: function(zoom) {
       this.zoom = zoom;
     },
+    activeRestaurant(newVal: RestaurantObject): void {
+      if (newVal) {
+        let position = {
+          coords: {
+            latitude: (+newVal.location.lat - 0.006)+"",
+            longitude: newVal.location.lng,
+          }
+        }
+        this.setPosition(position, 0, .7);
+      }
+	  }
   },
+  computed: {
+    ...mapGetters(["activeRestaurant"]),
+  }
 })
 export default class Map extends Vue {
   private url = 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png';
@@ -162,16 +177,16 @@ export default class Map extends Vue {
     return temp;
   }
 
-  private setPosition(position: Position): void {
+  private setPosition(position: Position|{coords: {latitude: string, longitude: string}}, delay = 500, duration = 1): void {
     this.zoom = 14;
     setTimeout(() => {
       (this.$refs.map as any).mapObject.setView([position.coords.latitude, position.coords.longitude], (this.$refs.map as any).mapObject.getZoom(), {
         "animate": true,
         "pan": {
-          "duration": 1
+          "duration": duration
         }
       });
-    }, 500);
+    }, delay);
   }
 
   private convertLatLng(lat: number, lng: number): any {

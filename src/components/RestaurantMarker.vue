@@ -9,17 +9,34 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Restaurant } from '../Restaurant';
+import { Restaurant, RestaurantObject } from '../Restaurant';
 import {LMarker, LPopup} from 'vue2-leaflet'
 //@ts-ignore
 import { latLng } from "leaflet";
 import Popup from './Popup.vue';
+import { mapGetters } from 'vuex';
 
-@Component({
+@Component<RestaurantMarker>({
     components: {
         LMarker,
         LPopup,
         Popup,
+    },
+    watch: {
+        activeRestaurant(newVal: RestaurantObject): void {
+            if (newVal && (this.$refs.marker as any).mapObject._icon) {
+                if (newVal.address === this.restaurant.address) {
+                    (this.$refs.marker as any).mapObject._icon.classList.add("active_marker");
+                } else {
+                    (this.$refs.marker as any).mapObject._icon.classList.remove("active_marker");
+                }
+            } else {
+                (this.$refs.marker as any).mapObject._icon.classList.remove("active_marker");
+            }
+        }
+    },
+    computed: {
+        ...mapGetters(["activeRestaurant"]),
     }
 })
 export default class RestaurantMarker extends Vue {
@@ -29,6 +46,7 @@ export default class RestaurantMarker extends Vue {
     private loadMenu = false;
 
     mounted(): void {
+        
     }
 
     public get marker(): any {
@@ -37,6 +55,7 @@ export default class RestaurantMarker extends Vue {
 
     private clickHandler(): void {
         //this.loadMenu = true;
+        this.$store.commit("activeRestaurant", this.restaurant.toObject());
         this.$store.commit("selectedRestaurants", [this.restaurant.toObject()]);
     }
 
@@ -54,6 +73,11 @@ export default class RestaurantMarker extends Vue {
 
     .leaflet-popup-tip {
         background: rgba(255, 255, 255, 0.8) !important;
+    }
+
+    .active_marker {
+        background: #1e953ea8;
+        border-radius: 120px 120px 120px 15px;
     }
 
 </style>

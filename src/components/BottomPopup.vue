@@ -4,7 +4,7 @@
             <i class="fa fa-times" aria-hidden="true"></i>
         </div>
         <div class="bottom_popup__content">
-            <Carousel class="full_height" :perPage="1">
+            <Carousel class="full_height" @page-change="handlePageChange" :perPage="1">
                 <Slide class="full_height" v-for="restaurant in restaurants" :key="restaurant.address">
                     <RestaurantInfo class="restaurant_info2" :restaurant="restaurant" :loadMenu="true" :forceMenuLoad="true"></RestaurantInfo>
                 </Slide>
@@ -28,15 +28,16 @@ import { Carousel, Slide } from 'vue-carousel';
     },
     watch: {
         selectedRestaurants(): void {
-            console.log(this.selectedRestaurants);
             this.restaurants = this.selectedRestaurants.map(restaurant => new Restaurant(
                 restaurant.title,
                 restaurant.address,
                 restaurant.location,
                 restaurant.website,
                 restaurant.type,
-            ))
-            console.log(this.restaurants);
+            ));
+            if (this.restaurants.length) {
+                this.$store.commit("activeRestaurant", this.restaurants[0].toObject());
+            }
         }
     }
 })
@@ -46,9 +47,16 @@ export default class BottomPopup extends Vue {
     @Prop() selectedRestaurants: RestaurantObject[];
     private restaurants: Restaurant[] = [];
 
+    public handlePageChange(pageNumber: number): void {
+        if (this.restaurants.length > pageNumber) {
+            this.$store.commit("activeRestaurant", this.restaurants[pageNumber].toObject());
+        }
+    }
+
     public handleClose(): void {
         this.restaurants = [];
         this.$store.commit("selectedRestaurants", []);
+        this.$store.commit("activeRestaurant", null);
     }
 }
 </script>

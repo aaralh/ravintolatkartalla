@@ -93,7 +93,7 @@ declare const L: any;
 		  }
 		}, 0)
 	  })
-	}
+	},
   },
   computed: {
 	  ...mapGetters(["selectedRestaurants"]),
