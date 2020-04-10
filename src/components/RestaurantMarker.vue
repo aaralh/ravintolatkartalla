@@ -21,19 +21,6 @@
 			LPopup,
 			Popup,
 		},
-		watch: {
-			activeRestaurant(newVal: RestaurantObject): void {
-				/* if (newVal && (this.$refs.marker as any).mapObject._icon) {
-					if (newVal.address === this.restaurant.address) {
-						(this.$refs.marker as any).mapObject._icon.classList.add("active_marker");
-					} else {
-						(this.$refs.marker as any).mapObject._icon.classList.remove("active_marker");
-					}
-				} else {
-					(this.$refs.marker as any).mapObject._icon.classList.remove("active_marker");
-				} */
-			}
-		},
 		computed: {
 			...mapGetters(["activeRestaurant"]),
 		}
@@ -41,16 +28,25 @@
 	export default class RestaurantMarker extends Vue {
 
 		//@ts-ignore
-		@Prop() restaurant: Restaurant;
+        @Prop() restaurant: Restaurant;
+        private declare activeRestaurant: RestaurantObject;
 		private loadMenu = false;
 
-		mounted(): void {
-
-		}
+		public setActive(): void {
+            try {
+                if (this.activeRestaurant.address === this.restaurant.address) {
+                    (this.$refs.marker as any).mapObject._icon.classList.add("active_marker");
+                } else {
+                    (this.$refs.marker as any).mapObject._icon.classList.remove("active_marker");
+                }
+            } catch(e) {
+                // We don't need to handle this error.
+            }
+        }
 
 		public get marker(): any {
 			return (this.$refs.marker as any).mapObject;
-		}
+        }
 
 		private clickHandler(): void {
 			//this.loadMenu = true;

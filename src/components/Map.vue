@@ -57,6 +57,7 @@
 			},
 			centerUpdated(center) {
 				this.center = center;
+				this.updateActiveRestaurants();
 			},
 			boundsUpdated(bounds) {
 				this.bounds = bounds;
@@ -72,8 +73,6 @@
 			activeRestaurant(newVal: RestaurantObject): void {
 				if (newVal) {
 					if (this.clickedRestaurant === null || this.clickedRestaurant.address !== newVal.address) {
-						console.log("Is not same");
-						console.log(newVal);
 						let position = {
 							coords: {
 								latitude: (+newVal.location.lat - 0.006) + "",
@@ -111,6 +110,8 @@
 		@Prop() boundsProp: any;
 		//@ts-ignore
 		@Prop() zoomProp: number;
+
+		private declare activeRestaurant: RestaurantObject;
 
 
 		public created(): void {
@@ -167,6 +168,14 @@
 			})
 		}
 
+		public updateActiveRestaurants(): void {
+			if (this.activeRestaurant !== null) {
+				this.$nextTick(() => {
+					(this.$refs.restaurant_marker as RestaurantMarker[]).forEach((marker: RestaurantMarker) => marker.setActive());
+				})
+			}
+		}
+
 		public get markers(): any {
 			return this.$refs.restaurant_marker;
 		}
@@ -183,6 +192,7 @@
 				this.$store.commit("activeRestaurant", restaurant);
 				this.$store.commit("selectedRestaurants", [restaurant]);
 				this.$store.commit("showBottomPopup", true);
+				this.updateActiveRestaurants();
 			});
 		}
 
