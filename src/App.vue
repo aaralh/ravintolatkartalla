@@ -42,7 +42,7 @@
 		<i class="fa fa-star"></i>
 	</div>
 	<SearchBar class="app__search_bar" v-model="keywords"></SearchBar>
-	<BottomPopup class="app__bottom_popup" v-bind:class="{'show' : selectedRestaurants.length}" :selectedRestaurants="selectedRestaurants"></BottomPopup>
+	<BottomPopup class="app__bottom_popup" v-bind:class="{'show' : showBottomPopup}" :selectedRestaurants="selectedRestaurants"></BottomPopup>
 	<Map ref="map" :boundsProp="bounds" :restaurants="restaurantArray" :zoomProp="mapZoom"></Map>
   </div>
 </template>
@@ -96,7 +96,7 @@ declare const L: any;
 	},
   },
   computed: {
-	  ...mapGetters(["selectedRestaurants"]),
+	  ...mapGetters(["selectedRestaurants", "showBottomPopup"]),
   }
 })
 export default class App extends Vue {
@@ -130,6 +130,7 @@ export default class App extends Vue {
 
   private openFavourites(): void {
 	  this.$store.commit("selectedRestaurants", getFavouriteRestaurants());
+	  this.$store.commit("showBottomPopup", true);
   }
 
   created(): void {

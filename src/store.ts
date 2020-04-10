@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     selectedRestaurants: [],
     activeRestaurant: null,
+    showBottomPopup: false,
   },
   mutations: {
     selectedRestaurants(state, data): void {
@@ -16,6 +17,9 @@ export default new Vuex.Store({
     activeRestaurant(state, data): void {
       state.activeRestaurant = data;
     },
+    showBottomPopup(state, data): void {
+      state.showBottomPopup = data;
+    },
   },
   getters: {
     selectedRestaurants(state): RestaurantObject[] {
@@ -23,6 +27,9 @@ export default new Vuex.Store({
     },
     activeRestaurant(state): RestaurantObject|null {
       return state.activeRestaurant;
+    },
+    showBottomPopup(state): boolean {
+      return state.showBottomPopup;
     },
   },
   actions: {

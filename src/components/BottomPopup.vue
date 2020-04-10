@@ -4,11 +4,18 @@
             <i class="fa fa-times" aria-hidden="true"></i>
         </div>
         <div class="bottom_popup__content">
-            <Carousel class="full_height" @page-change="handlePageChange" :perPage="1">
+            <Carousel v-if="restaurants.length" class="full_height" @page-change="handlePageChange" :perPage="1">
                 <Slide class="full_height" v-for="restaurant in restaurants" :key="restaurant.address">
                     <RestaurantInfo class="restaurant_info2" :restaurant="restaurant" :loadMenu="true" :forceMenuLoad="true"></RestaurantInfo>
                 </Slide>
             </Carousel>
+            <div v-else class="no_favourites_info">
+                <div class="no_favourites_info__content">
+                    <div class="title">Hups, sinulla ei vielä ole suosikkiravintoloita.</div>
+                    <div class="text">Lisää haluamasi ravintolat suosikiksi painamalla ravintolakortilta löytyvää <i class="fa fa-star-o"></i> -symbolia,
+                    niin voit selata ruokalistat tässä paneelissa nopeasti.</div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -57,6 +64,7 @@ export default class BottomPopup extends Vue {
         this.restaurants = [];
         this.$store.commit("selectedRestaurants", []);
         this.$store.commit("activeRestaurant", null);
+        this.$store.commit("showBottomPopup", false);
     }
 }
 </script>
@@ -96,11 +104,36 @@ export default class BottomPopup extends Vue {
             display: flex;
             justify-content: center;
             align-items: center;
+            cursor: pointer;
         }
 
         &__content {
             padding: 10px;
             height: 100%;
+
+            .no_favourites_info {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                &__content {
+                    width: 50%;
+                    min-width: 332px;
+                    font-size: 18px;
+
+                    & > .title {
+                        color: #2f2f2f;
+                        margin-bottom: 7px;
+                        font-weight: bolder;
+                    }
+
+                    & > .text {
+                        color: #4a4a4a;
+                    }
+                }
+            }
         }
     }
 

@@ -24,7 +24,7 @@ import { mapGetters } from 'vuex';
     },
     watch: {
         activeRestaurant(newVal: RestaurantObject): void {
-            if (newVal && (this.$refs.marker as any).mapObject._icon) {
+            /* if (newVal && (this.$refs.marker as any).mapObject._icon) {
                 if (newVal.address === this.restaurant.address) {
                     (this.$refs.marker as any).mapObject._icon.classList.add("active_marker");
                 } else {
@@ -32,7 +32,7 @@ import { mapGetters } from 'vuex';
                 }
             } else {
                 (this.$refs.marker as any).mapObject._icon.classList.remove("active_marker");
-            }
+            } */
         }
     },
     computed: {
@@ -57,6 +57,7 @@ export default class RestaurantMarker extends Vue {
         //this.loadMenu = true;
         this.$store.commit("activeRestaurant", this.restaurant.toObject());
         this.$store.commit("selectedRestaurants", [this.restaurant.toObject()]);
+        this.$store.commit("showBottomPopup", true);
     }
 
     private convertLatLng(location: Restaurant["location"]): any {
