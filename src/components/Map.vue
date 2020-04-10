@@ -71,7 +71,7 @@
 				this.zoom = zoom;
 			},
 			activeRestaurant(newVal: RestaurantObject): void {
-				if (newVal) {
+				if (newVal !== null) {
 					if (this.clickedRestaurant === null || this.clickedRestaurant.address !== newVal.address) {
 						let position = {
 							coords: {
@@ -79,8 +79,11 @@
 								longitude: newVal.location.lng,
 							}
 						}
-						this.setPosition(position, 0, .7);
+						this.setPosition(position, 14, 0, .7);
 					}
+				} else {
+					this.clickedRestaurant = null;
+					this.updateActiveRestaurants(false);
 				}
 			}
 		},
@@ -168,10 +171,10 @@
 			})
 		}
 
-		public updateActiveRestaurants(): void {
-			if (this.activeRestaurant !== null) {
+		public updateActiveRestaurants(status = true): void {
+			if (this.activeRestaurant !== null || !status) {
 				this.$nextTick(() => {
-					(this.$refs.restaurant_marker as RestaurantMarker[]).forEach((marker: RestaurantMarker) => marker.setActive());
+					(this.$refs.restaurant_marker as RestaurantMarker[]).forEach((marker: RestaurantMarker) => marker.setActive(status));
 				})
 			}
 		}
@@ -182,13 +185,13 @@
 
 		private markerClicked(restaurant: RestaurantObject): void {
 			this.clickedRestaurant = restaurant;
-			let x = {
+			let location = {
 				coords: {
-					latitude: (+restaurant.location.lat - 0.006) + "",
+					latitude: (+restaurant.location.lat - 0.0015) + "",
 					longitude: restaurant.location.lng,
 				}
 			}
-			this.setPosition(x, 0).then(() => {
+			this.setPosition(location, 16, 0).then(() => {
 				this.$store.commit("activeRestaurant", restaurant);
 				this.$store.commit("selectedRestaurants", [restaurant]);
 				this.$store.commit("showBottomPopup", true);
@@ -210,11 +213,11 @@
 			return temp;
 		}
 
-		private setPosition(position: Position | { coords: { latitude: string, longitude: string } }, delay = 500, duration = 1): Promise<void> {
+		private setPosition(position: Position | { coords: { latitude: string, longitude: string } }, zoom = 14, delay = 500, duration = 1): Promise<void> {
 			return new Promise((resolve, reject) => {
 
 				setTimeout(() => {
-					(this.$refs.map as any).mapObject.setView([position.coords.latitude, position.coords.longitude], 14, {
+					(this.$refs.map as any).mapObject.setView([position.coords.latitude, position.coords.longitude], zoom, {
 						"animate": true,
 						"pan": {
 							"duration": duration
@@ -222,7 +225,7 @@
 					});
 					setTimeout(() => {
 						resolve();
-						this.zoom = 14;
+						this.zoom = zoom;
 					}, duration);
 				}, delay);
 			})

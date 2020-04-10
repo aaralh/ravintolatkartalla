@@ -32,10 +32,14 @@
         private declare activeRestaurant: RestaurantObject;
 		private loadMenu = false;
 
-		public setActive(): void {
+		public setActive(status = true): void {
             try {
-                if (this.activeRestaurant.address === this.restaurant.address) {
-                    (this.$refs.marker as any).mapObject._icon.classList.add("active_marker");
+                if (this.activeRestaurant !== null) {
+                    if (this.activeRestaurant.address === this.restaurant.address && status) {
+                        (this.$refs.marker as any).mapObject._icon.classList.add("active_marker");
+                    } else {
+                        (this.$refs.marker as any).mapObject._icon.classList.remove("active_marker");
+                    }
                 } else {
                     (this.$refs.marker as any).mapObject._icon.classList.remove("active_marker");
                 }

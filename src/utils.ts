@@ -117,7 +117,9 @@ export function fetchLuchMenu(url: string, restaurant: Restaurant): Promise<any>
         fetch("https://akalhainen.me/" + url)
             .then(function (response) {
                 response.json().then(menu => {
-                    resolve(parseRestaurantData(menu, restaurant));
+                    let data = parseRestaurantData(menu, restaurant);
+                    data.then(i => console.log)
+                    resolve(data);
                 })
             },
             (err) => {
@@ -328,7 +330,7 @@ function parseJuvenes(menu: any, restaurant: Restaurant): Promise<MenuJson> {
                     menuJson.hasMenu = false;
                     menuJson.hasTime = false;
                 }
-                
+                resolve(menuJson);
             })
     })
 }

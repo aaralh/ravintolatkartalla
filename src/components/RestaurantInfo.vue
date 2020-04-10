@@ -34,7 +34,6 @@
 		},
 		watch: {
 			loadMenu: function (newVal, oldVal) {
-				console.log("loadMenu");
 				if (!oldVal && newVal) {
 					this.updateMenuData();
 				}
@@ -59,7 +58,6 @@
 		private isFavourite = false;
 
 		public created(): void {
-			console.log("Created");
 			let restaurants = getFavouriteRestaurants();
 			let filteredRestaurants = restaurants.filter(restaurant => restaurant.address === this.restaurant.address);
 			if (filteredRestaurants.length > 0) {
@@ -71,6 +69,7 @@
 		}
 
 		private updateMenuData(): void {
+            console.log(this.restaurant);
 			if (this.restaurant!.lunchUrl) {
 				fetchLuchMenu(this.restaurant!.lunchUrl, this.restaurant).then(menu => {
 					this.isLoading = false;

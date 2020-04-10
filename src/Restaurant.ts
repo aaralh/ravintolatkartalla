@@ -9,6 +9,7 @@ export interface RestaurantObject {
     address: string,
     website: string,
     title: string,
+    lunchUrl?: string,
 }
 
 declare const L: any;
@@ -86,6 +87,7 @@ export class Restaurant {
             website: this._website,
             type: this._type,
             location: this._location,
+            lunchUrl: this.lunchUrl
         }
     }
 }

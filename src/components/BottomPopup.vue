@@ -41,6 +41,7 @@ import { Carousel, Slide } from 'vue-carousel';
                 restaurant.location,
                 restaurant.website,
                 restaurant.type,
+                restaurant.lunchUrl
             ));
             if (this.restaurants.length) {
                 this.$store.commit("activeRestaurant", this.restaurants[0].toObject());
