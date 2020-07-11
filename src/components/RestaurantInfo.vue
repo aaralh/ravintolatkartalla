@@ -75,7 +75,6 @@
 		}
 
 		private updateMenuData(): void {
-            console.log(this.restaurant);
 			if (this.restaurant!.lunchUrl) {
 				fetchLuchMenu(this.restaurant!.lunchUrl, this.restaurant).then(menu => {
 					this.isLoading = false;
