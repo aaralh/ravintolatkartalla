@@ -5,6 +5,14 @@
 				<img src="./assets/header.png" />
 			</div>
 		</div>
+		<div v-if="showKoronaInfo" class="korona_info">
+			<p>
+				Koronatilanteesta johtuen ravintoloiden tiedoissa voi olla puutteita.
+			</p>
+			<div class="korona_info__close" @click="handleClose()">
+				<i class="fa fa-times" aria-hidden="true"></i>
+			</div>
+		</div>
 		<div v-if="!isMobile" @click="zoomMapIn" class="app__zoom_in">
 			<img src="./assets/plus.png" alt="zoom in" />
 		</div>
@@ -117,6 +125,7 @@
 		private keywords = "";
 		private bounds = null;
 		private mapZoom: null | number = null;
+		private showKoronaInfo = true;
 
 		private getRestaurants(): Promise<Restaurant[]> {
 			return fetch("https://akalhainen.me/ruokalistat/restaurants.json").then(
@@ -188,16 +197,39 @@
 		private zoomMapOut(): void {
 			(this.$refs.map as Map).zoomOut();
 		}
+
+		private handleClose(): void {
+			this.showKoronaInfo = false;
+		}
 	}
 </script>
 
 <style lang="scss">
+
+	* {
+		font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	}
+
 	html {
 		overflow: hidden;
 	}
 
 	.bold {
 		font-weight: bold;
+	}
+
+	.korona_info {
+		background-color: whitesmoke;
+		padding: 10px;
+		position: absolute;
+		top: 96px;
+		left: 0;
+		z-index: 99999;
+		display: flex;
+		
+		&__close {
+			padding: 5px;
+		}
 	}
 
 	.app {

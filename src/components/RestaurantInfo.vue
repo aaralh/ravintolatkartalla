@@ -12,6 +12,12 @@
 		<div v-if="hasMenu" class="restaurant_info__menu">
 			<AccordionItem :lunchMenuItem="item" v-for="item in lunchMenu" :key="item.Name"></AccordionItem>
 		</div>
+		<div v-else-if="!hasMenu && restaurant.website" class="restaurant_info__link">
+			<p>Valitettavasti lounaslistaa ei ole saatavissa. Löydät ravintolan verkkosivun <a rel="noopener" :href="restaurant.website">täältä.</a></p>
+		</div>
+		<div v-else class="restaurant_info__link">
+			<p>Valitettavasti lounaslistaa ei ole saatavissa.</p>
+		</div>
 		<div v-if="isLoading" class="restaurant_info__loading">
 			<i class="fa fa-spinner fa-spin"></i>
 		</div>
@@ -117,6 +123,15 @@
 		height: 100%;
 		width: 100%;
 		font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+
+		&__link {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 16px;
+		}
 
 		&__label {
 			&__title {

@@ -135,7 +135,7 @@ function parseRestaurantData(menu: {}, restaurant: Restaurant): Promise<MenuJson
                 resolve(parseFazer(menu));
                 break;
             case "unicafe":
-                resolve(parseUnicafe(menu));
+                resolve(parseUnicafe(menu, restaurant));
                 break;
             case "sodexo":
                 resolve(parseSodexo(menu));
@@ -201,17 +201,15 @@ function parseFazer(menu: any): MenuJson {
     return menuJson;
 }
 
-function parseUnicafe(menu: any): MenuJson {
+function parseUnicafe(menu: any, restaurant: Restaurant): MenuJson {
     let menuJson: MenuJson = initMenuJson();
     let restaurantMenu;
-    if (menuJson.title.toLowerCase().includes("soc & kom")) {
-        restaurantMenu = menu.filter((menu: any) => menu.menuData.name.toLowerCase().includes("soc&kom"))[0];
-    } else {
-        restaurantMenu = menu.filter((menu: any) => {
-            if (!menu.menuData) return false;
-            return menuJson.title.toLowerCase().includes(menu.menuData.name.toLowerCase())
-        })[0];
-    }
+
+    restaurantMenu = menu.filter((menu: any) => {
+        if (!menu.menuData) return false;
+        return restaurant.title.toLowerCase() === menu.title.toLowerCase()
+    })[0];
+
     if (!restaurantMenu) {
         menuJson.hasMenu = false;
         menuJson.hasTime = false;
@@ -223,6 +221,7 @@ function parseUnicafe(menu: any): MenuJson {
         let menuItemDate = getDate(dateString, "dd.mm.yyyy", ".");
         return menuItemDate.getDate() === new Date().getDate();
     })[0].data;
+    
     menuJson.title = restaurantMenu.title;
     let visitingHours = restaurantMenu.menuData.visitingHours.lounas.items
     let weekDay = new Date().getDay();

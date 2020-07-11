@@ -62,10 +62,12 @@ export default class BottomPopup extends Vue {
     }
 
     public handleClose(): void {
-        this.restaurants = [];
-        this.$store.commit("selectedRestaurants", []);
-        this.$store.commit("activeRestaurant", null);
         this.$store.commit("showBottomPopup", false);
+        setTimeout(() => {
+            this.restaurants = [];
+            this.$store.commit("selectedRestaurants", []);
+            this.$store.commit("activeRestaurant", null);
+        }, 500)
     }
 }
 </script>
