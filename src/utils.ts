@@ -112,7 +112,6 @@ export function removeFavouriteRestaurant(restaurant: Restaurant): RestaurantObj
 }
 
 export function fetchLuchMenu(url: string, restaurant: Restaurant): Promise<any> {
-    console.log("fetching");
     return new Promise((resolve, reject) => {
         fetch("https://akalhainen.me/" + url)
             .then(function (response) {
@@ -221,7 +220,7 @@ function parseUnicafe(menu: any, restaurant: Restaurant): MenuJson {
         let menuItemDate = getDate(dateString, "dd.mm.yyyy", ".");
         return menuItemDate.getDate() === new Date().getDate();
     })[0].data;
-    
+
     menuJson.title = restaurantMenu.title;
     let visitingHours = restaurantMenu.menuData.visitingHours.lounas.items
     let weekDay = new Date().getDay();
