@@ -51,11 +51,13 @@
 			<i class="fa fa-star"></i>
 		</div>
 		<SearchBar class="app__search_bar" v-model="keywords" ref="search_bar"></SearchBar>
-		<BottomPopup
-			class="app__bottom_popup"
-			v-bind:class="{'show' : showBottomPopup}"
-			:selectedRestaurants="selectedRestaurants"
-		></BottomPopup>
+		<transition name="slide">
+			<BottomPopup
+				v-if="showBottomPopup"
+				class="app__bottom_popup"
+				:selectedRestaurants="selectedRestaurants"
+			></BottomPopup>
+		</transition>
 		<Map ref="map" :boundsProp="bounds" :restaurants="restaurantArray" :zoomProp="mapZoom"></Map>
 	</div>
 </template>
@@ -209,6 +211,10 @@
 	* {
 		font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
 	}
+	// This selexts the user agreement for cookies.
+	body > div.cc-window.cc-banner.cc-type-info.cc-theme-block.cc-bottom.cc-color-override-688238583 {
+		z-index: 9999999;
+	}
 
 	html {
 		overflow: hidden;
@@ -221,14 +227,17 @@
 	.korona_info {
 		background-color: whitesmoke;
 		padding: 10px;
+		margin: 10px;
 		position: absolute;
-		top: 96px;
+		top: 86px;
 		left: 0;
 		z-index: 99999;
 		display: flex;
 		
 		&__close {
 			padding: 5px;
+			padding-top: 0;
+			cursor: pointer;
 		}
 	}
 
@@ -381,13 +390,7 @@
 		}
 
 		&__bottom_popup {
-			transform: translateY(100%);
-			transition: transform ease-in-out 0.3s;
-
-			&.show {
-				transform: translateY(0);
-				transition: transform ease-in-out 0.3s;
-			}
+			transform: translateY(0);
 		}
 	}
 
@@ -406,5 +409,12 @@
 	}
 	.fa {
 		color: #87b877;
+	}
+
+	.slide-enter-active, .slide-leave-active {
+		transition: transform ease-in-out 0.3s;
+	}
+	.slide-enter, .slide-leave-to {
+		transform: translateY(100%);
 	}
 </style>

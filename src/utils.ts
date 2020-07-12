@@ -225,11 +225,15 @@ function parseUnicafe(menu: any, restaurant: Restaurant): MenuJson {
     let visitingHours = restaurantMenu.menuData.visitingHours.lounas.items
     let weekDay = new Date().getDay();
     if (visitingHours) {
-        let openHours: {
-            opening_hour: string,
-            closing_hour: string,
-        };
-        menuJson.lunchTime = visitingHours[0].label + " " + visitingHours[0].hours + ", " + visitingHours[1].label + " " + visitingHours[1].hours;
+        try {
+            let openHours: {
+                opening_hour: string,
+                closing_hour: string,
+            };
+            menuJson.lunchTime = visitingHours[0].label + " " + visitingHours[0].hours + ", " + visitingHours[1].label + " " + visitingHours[1].hours;
+        } catch {
+            console.info("Failed to parse lunch time.")
+        }
     } else {
         menuJson.lunchTime = "";
         menuJson.hasTime = false;

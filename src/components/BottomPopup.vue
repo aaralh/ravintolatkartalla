@@ -35,17 +35,7 @@ import { Carousel, Slide } from 'vue-carousel';
     },
     watch: {
         selectedRestaurants(): void {
-            this.restaurants = this.selectedRestaurants.map(restaurant => new Restaurant(
-                restaurant.title,
-                restaurant.address,
-                restaurant.location,
-                restaurant.website,
-                restaurant.type,
-                restaurant.lunchUrl
-            ));
-            if (this.restaurants.length) {
-                this.$store.commit("activeRestaurant", this.restaurants[0].toObject());
-            }
+            this.updateRestaurants();
         }
     }
 })
@@ -54,6 +44,24 @@ export default class BottomPopup extends Vue {
     //@ts-ignore
     @Prop() selectedRestaurants: RestaurantObject[];
     private restaurants: Restaurant[] = [];
+
+    public mounted(): void {
+        this.updateRestaurants();
+    }
+
+    public updateRestaurants(): void {
+        this.restaurants = this.selectedRestaurants.map(restaurant => new Restaurant(
+            restaurant.title,
+            restaurant.address,
+            restaurant.location,
+            restaurant.website,
+            restaurant.type,
+            restaurant.lunchUrl
+        ));
+        if (this.restaurants.length) {
+            this.$store.commit("activeRestaurant", this.restaurants[0].toObject());
+        }
+    }
 
     public handlePageChange(pageNumber: number): void {
         if (this.restaurants.length > pageNumber) {
