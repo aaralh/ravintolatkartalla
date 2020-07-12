@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "924289c84b1647317ca0",
-    "url": "css/app.4f13e3d8.css"
+    "revision": "68920038a5aa04f56586",
+    "url": "css/app.261347b3.css"
   },
   {
-    "revision": "924289c84b1647317ca0",
-    "url": "js/app.0da597a0.js"
+    "revision": "68920038a5aa04f56586",
+    "url": "js/app.b74226b3.js"
   },
   {
     "revision": "32e73d45cb742894027e",
@@ -28,16 +28,16 @@ self.__precacheManifest = [
     "url": "img/cluster_with_shadow.7e96b510.png"
   },
   {
-    "revision": "48322ffbe42b1e847762e272ffc4ebfa",
+    "revision": "24dcb831fb65af41bba6938683fd67ec",
     "url": "index.html"
-  },
-  {
-    "revision": "7b1791e8add1e908255949e1c837b23b",
-    "url": "CNAME"
   },
   {
     "revision": "761411f989683723fd76c3088d8124dc",
     "url": "cookies.html"
+  },
+  {
+    "revision": "7b1791e8add1e908255949e1c837b23b",
+    "url": "CNAME"
   },
   {
     "revision": "4ef14e1b435052a6959353282469ce9c",
