@@ -57,13 +57,17 @@
 
 		private lunchMenu: FoodMenu[] = [];
 		private lunchTime = "";
-		private title = this.restaurant!.title;
+		private title = "";
 		private hasMenu = true;
 		private hasTime = true;
 		private isLoading = true;
 		private isFavourite = false;
 
+		/**
+		 * Vue created hook.
+		 */
 		public created(): void {
+			this.title = this.restaurant.title
 			let restaurants = getFavouriteRestaurants();
 			let filteredRestaurants = restaurants.filter(restaurant => restaurant.address === this.restaurant.address);
 			if (filteredRestaurants.length > 0) {
@@ -74,9 +78,12 @@
 			}
 		}
 
+		/**
+		 * Fetches and updates the restaurant info.
+		 */
 		private updateMenuData(): void {
-			if (this.restaurant!.lunchUrl) {
-				fetchLuchMenu(this.restaurant!.lunchUrl, this.restaurant).then(menu => {
+			if (this.restaurant.lunchUrl) {
+				fetchLuchMenu(this.restaurant.lunchUrl, this.restaurant).then(menu => {
 					this.isLoading = false;
 					this.lunchMenu = menu.lunchMenu;
 					this.lunchTime = menu.lunchTime;
@@ -93,6 +100,9 @@
 			}
 		}
 
+		/**
+		 * Handles favourite button click.
+		 */
 		private handleFavourite(): void {
 			if (this.isFavourite) {
 				removeFavouriteRestaurant(this.restaurant);

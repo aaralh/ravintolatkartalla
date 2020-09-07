@@ -127,6 +127,14 @@ export function fetchLuchMenu(url: string, restaurant: Restaurant): Promise<any>
     })
 }
 
+/**
+ * Parses given menu data with suitable parser and returns parsed menu.
+ * 
+ * @param menu Menu to be parsed.
+ * @param restaurant Restaurant object whom the menu belongs.
+ * 
+ * @return MenuJson promise.
+ */
 function parseRestaurantData(menu: {}, restaurant: Restaurant): Promise<MenuJson> {
     return new Promise((resolve, reject) => {
         switch(restaurant.type) {
@@ -159,6 +167,15 @@ function parseRestaurantData(menu: {}, restaurant: Restaurant): Promise<MenuJson
     })
 }
 
+/**
+ * Formats the given date to the correct format.
+ * 
+ * @param date Date in string format.
+ * @param format Format for the date string.
+ * @param delimiter Delimiter for the date string.
+ * 
+ * @return Formated date.
+ */
 function getDate(date: string, format: string, delimiter: string): Date {
     const formatLowerCase = format.toLowerCase();
     const formatItems = formatLowerCase.split(delimiter);
@@ -172,6 +189,13 @@ function getDate(date: string, format: string, delimiter: string): Date {
     return formatedDate;
 }
 
+/**
+ * Parser for Fazer menu data.
+ * 
+ * @param menu Restaurants menu json.
+ * 
+ * @return Restaurants menu json formated to MenuJson format.
+ */
 function parseFazer(menu: any): MenuJson {
     let menuJson: MenuJson = initMenuJson();
     if (!menu.MenusForDays) {
@@ -200,6 +224,14 @@ function parseFazer(menu: any): MenuJson {
     return menuJson;
 }
 
+/**
+ * Parser for Unicafe menu data.
+ * 
+ * @param menu Restaurants menu json.
+ * @param restaurant Restaurants object
+ * 
+ * @return Restaurants menu json formated to MenuJson format.
+ */
 function parseUnicafe(menu: any, restaurant: Restaurant): MenuJson {
     let menuJson: MenuJson = initMenuJson();
     let restaurantMenu;
@@ -257,6 +289,13 @@ function parseUnicafe(menu: any, restaurant: Restaurant): MenuJson {
     return menuJson;
 }
 
+/**
+ * Parser for Sodexo menu data.
+ * 
+ * @param menu Restaurants menu json.
+ * 
+ * @return Restaurants menu json formated to MenuJson format.
+ */
 function parseSodexo(menu: any): MenuJson {
     let menuJson: MenuJson = initMenuJson();
     if (!menu.menus) {
@@ -292,6 +331,14 @@ function parseSodexo(menu: any): MenuJson {
     return menuJson;
 }
 
+/**
+ * Parser for Juvenes menu data.
+ * 
+ * @param menu Restaurants menu json.
+ * @param restaurant Restaurants object
+ * 
+ * @return Promise for restaurants menu json formated to MenuJson format.
+ */
 function parseJuvenes(menu: any, restaurant: Restaurant): Promise<MenuJson> {
     return new Promise((resolve, reject) => {
         let menuJson: MenuJson = initMenuJson();
@@ -337,6 +384,13 @@ function parseJuvenes(menu: any, restaurant: Restaurant): Promise<MenuJson> {
     })
 }
 
+/**
+ * Parser for Mehtimaki menu data.
+ * 
+ * @param menu Restaurants menu json.
+ * 
+ * @return Restaurants menu json formated to MenuJson format.
+ */
 function parseMehtimaki(menu: any): MenuJson {
     let menuJson: MenuJson = initMenuJson();
     menuJson.hasTime = false;
@@ -344,6 +398,13 @@ function parseMehtimaki(menu: any): MenuJson {
     return menuJson;
 }
 
+/**
+ * Parser for Hel menu data.
+ * 
+ * @param menu Restaurants menu json.
+ * 
+ * @return Restaurants menu json formated to MenuJson format.
+ */
 function parseHel(menu: any): MenuJson {
     let menuJson: MenuJson = initMenuJson();
     let menuData = menu.Days.filter((menuItem: any) => {
@@ -371,6 +432,13 @@ function parseHel(menu: any): MenuJson {
     return menuJson;
 }
 
+/**
+ * Parser for Unica menu data.
+ * 
+ * @param menuData Restaurants menu json.
+ * 
+ * @return Restaurants menu json formated to MenuJson format.
+ */
 function parseUnica(menuData: any): MenuJson {
     let menuJson: MenuJson = initMenuJson();
     let { menu, openingHours } = menuData;

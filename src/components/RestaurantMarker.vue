@@ -44,7 +44,8 @@
                     (this.$refs.marker as any).mapObject._icon.classList.remove("active_marker");
                 }
             } catch(e) {
-                // We don't need to handle this error.
+				// The only error that may happen is that when the marker on the map is not visible when the class list is modified.
+                console.error(e)
             }
         }
 
@@ -52,12 +53,21 @@
 			return (this.$refs.marker as any).mapObject;
         }
 
+		/**
+		 * Handle restaurant marker click.
+		 */
 		private clickHandler(): void {
-			//this.loadMenu = true;
 			this.$emit("markerClicked", this.restaurant.toObject())
 		}
 
-		private convertLatLng(location: Restaurant["location"]): any {
+		/**
+		 * Converts given location to leaflets latLng format.
+		 * 
+		 * @param location Location which will be converted.
+		 * 
+		 * @return Leaflets latLng format presentation of the given location.
+		 */
+		private convertLatLng(location: Restaurant["location"]): latLng {
 			return latLng(location.lat, location.lng);
 		}
 	}

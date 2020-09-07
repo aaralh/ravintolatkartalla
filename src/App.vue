@@ -129,6 +129,11 @@
 		private mapZoom: null | number = null;
 		private showKoronaInfo = true;
 
+		/**
+		 * Fetch restaurant info.
+		 * 
+		 * @return Promise of resturant array.
+		 */
 		private getRestaurants(): Promise<Restaurant[]> {
 			return fetch("https://akalhainen.me/ruokalistat/restaurants.json").then(
 				function (response) {
@@ -137,7 +142,10 @@
 			);
 		}
 
-		private informationClickHanler(e: Event): void {
+		/**
+		 * Information button click handler.
+		 */
+		private informationClickHanler(): void {
 			this.content = this.content + 1;
 			this.showInformation = !this.showInformation;
 		}
@@ -159,6 +167,9 @@
 			return check;
 		}
 
+		/**
+		 * Favourites button click handler.
+		 */
 		private openFavourites(): void {
 			this.keywords = "";
 			(this.$refs.search_bar as SearchBar).open = false;
@@ -168,6 +179,9 @@
 			})
 		}
 
+		/**
+		 * Vue created hook.
+		 */
 		public created(): void {
 			this.getRestaurants().then(restaurants => {
 				restaurants.forEach(restaurant => {
@@ -183,23 +197,25 @@
 					this.restaurantArray.push(newRestaurant);
 				});
 			});
-
-			document.addEventListener("swUpdated", this.updateApp, { once: true });
 		}
 
-		private updateApp(e: any) {
-			console.log("Deploying update..");
-			//window.location.reload(true);
-		}
-
+		/**
+		 * Zoom in button click handler.
+		 */
 		private zoomMapIn(): void {
 			(this.$refs.map as Map).zoomIn();
 		}
 
+		/**
+		 * Zoom out button click handler.
+		 */
 		private zoomMapOut(): void {
 			(this.$refs.map as Map).zoomOut();
 		}
 
+		/**
+		 * Handle korona info close button click.
+		 */
 		private handleClose(): void {
 			this.showKoronaInfo = false;
 		}

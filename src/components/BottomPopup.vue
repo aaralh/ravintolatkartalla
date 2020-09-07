@@ -45,10 +45,16 @@ export default class BottomPopup extends Vue {
     @Prop() selectedRestaurants: RestaurantObject[];
     private restaurants: Restaurant[] = [];
 
+    /**
+     * Vue mounted hook.
+     */
     public mounted(): void {
         this.updateRestaurants();
     }
 
+    /**
+     * Update active restaurant info to store.
+     */
     public updateRestaurants(): void {
         this.restaurants = this.selectedRestaurants.map(restaurant => new Restaurant(
             restaurant.title,
@@ -63,14 +69,23 @@ export default class BottomPopup extends Vue {
         }
     }
 
+    /**
+     * Handle page change event.
+     * 
+     * @param pageNumber number of the page.
+     */
     public handlePageChange(pageNumber: number): void {
         if (this.restaurants.length > pageNumber) {
             this.$store.commit("activeRestaurant", this.restaurants[pageNumber].toObject());
         }
     }
 
+    /**
+     * Handle bottom popup close.
+     */
     public handleClose(): void {
         this.$store.commit("showBottomPopup", false);
+        // Add setTimeout so closing animation will run before clearing panel contents.
         setTimeout(() => {
             this.restaurants = [];
             this.$store.commit("selectedRestaurants", []);

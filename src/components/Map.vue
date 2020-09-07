@@ -40,7 +40,7 @@
 	import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster';
 	import { mapGetters } from 'vuex';
 
-	// Declare leaflet L.
+	// Declare leaflet as L.
 	declare const L: any;
 
 	@Component<Map>({
@@ -116,14 +116,16 @@
 
 		private declare activeRestaurant: RestaurantObject;
 
-
+		/**
+		 * Vue created hook.
+		 */
 		public created(): void {
 			let vh = window.innerHeight * 0.01;
-			// Set calculeted custom vh to the property to be used in css.
+			// Set calculated custom vh to the property to be used in css.
 			document.documentElement.style.setProperty('--vh', `${vh}px`);
 			window.addEventListener('resize', () => {
 				let vh = window.innerHeight * 0.01;
-				// Set calculeted custom vh to the property to be used in css.
+				// Set calculated custom vh to the property to be used in css.
 				document.documentElement.style.setProperty('--vh', `${vh}px`);
 			});
 
@@ -136,10 +138,14 @@
 			});
 		}
 
+		/**
+		 * Vue mounted hook.
+		 */
 		public mounted(): void {
 			this.$nextTick(() => {
 				(this.$refs.cluster as any).mapObject.options.iconCreateFunction = this.createIcon;
 			})
+			// Init user location and marker on the map.
 			if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(this.setPosition);
 			}
@@ -157,10 +163,8 @@
 							options: {
 								iconUrl: require("../assets/location.png"),
 								iconSize: [20, 20],
-								//shadowUrl: "../resources/img/map/icons/shadow.png",
 								shadowAnchor: [8, 20],
 								shadowSize: [25, 18],
-								//iconSize: [20, 25],
 								iconAnchor: [8, 30] // horizontal puis vertical
 							}
 						});
@@ -171,6 +175,11 @@
 			})
 		}
 
+		/**
+		 * Updates the active restaurant marker status for markers.
+		 * 
+		 * @param status boolean to deside is the update performed or not.
+		 */
 		public updateActiveRestaurants(status = true): void {
 			if (this.activeRestaurant !== null || !status) {
 				this.$nextTick(() => {
@@ -183,6 +192,11 @@
 			return this.$refs.restaurant_marker;
 		}
 
+		/**
+		 * Handler for restaurant click event.
+		 * 
+		 * @param restaurant restaurant object of the clicked restaurant.
+		 */
 		private markerClicked(restaurant: RestaurantObject): void {
 			this.clickedRestaurant = restaurant;
 			let location = {
@@ -199,7 +213,14 @@
 			});
 		}
 
-		private createIcon(cluster: any): void {
+		/**
+		 * Fucntion to create icon.
+		 * 
+		 * @param cluster leaflet cluster.
+		 * 
+		 * ̣̣̣̣̣̣̣̣̣̣@return DivIcon icon object.
+		 */
+		private createIcon(cluster: any): DivIcon {
 			let childCount = cluster.getChildCount();
 
 			let html = '<div class="carrot"></div>';
@@ -213,6 +234,13 @@
 			return temp;
 		}
 
+		/**
+		 * Sets the maps view to given position.
+		 * 
+		 * @param position Position where the view will be set.
+		 * 
+		 * @return Promise which resolves when the animation is finished.
+		 */
 		private setPosition(position: Position | { coords: { latitude: string, longitude: string } }, zoom = 14, delay = 500, duration = 1): Promise<void> {
 			return new Promise((resolve, reject) => {
 
@@ -231,14 +259,28 @@
 			})
 		}
 
-		private convertLatLng(lat: number, lng: number): any {
+		/**
+		 * Converts given lat lng coordinates to leaflets latLng format.
+		 * 
+		 * @param lat latitude coordinate
+		 * @param lng longitude coordinate
+		 * 
+		 * @return Leaflet latLng format position.
+		 */
+		private convertLatLng(lat: number, lng: number): latLng {
 			return latLng(lat, lng);
 		}
 
+		/**
+		 * handler for zoom in.
+		 */
 		public zoomIn(): void {
 			this.zoom++;
 		}
 
+		/**
+		 * Handler for zoom out.
+		 */
 		public zoomOut(): void {
 			this.zoom--;
 		}

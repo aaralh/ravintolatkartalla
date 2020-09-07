@@ -38,17 +38,40 @@
 		@Prop() lunchMenuItem: { Name: string, Components: string[], Price: string };
 		private isOpen = false;
 
+		/**
+		 * Vue transition hook for before-enter.
+		 * 
+		 * @param el The html element in transition group.
+		 */
 		private beforeEnter(el: HTMLElement): void {
 			el.style.height = '0';
 		};
+
+		/**
+		 * Vue transition hook for enter.
+		 * 
+		 * @param el The html element in transition group.
+		 */
 		private enter(el: HTMLElement): void {
 			this.$nextTick(() => {
 				el.style.height = el.scrollHeight + 'px';
 			})
 		};
+
+		/**
+		 * Vue transition hook for before-leave.
+		 * 
+		 * @param el The html element in transition group.
+		 */
 		private beforeLeave(el: HTMLElement): void {
 			el.style.height = el.scrollHeight + 'px';
 		};
+
+		/**
+		 * Vue transition hook for leave.
+		 * 
+		 * @param el The html element in transition group.
+		 */
 		private leave(el: HTMLElement): void {
 			el.style.height = '0';
 		};
