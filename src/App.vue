@@ -135,7 +135,7 @@
 		 * @return Promise of resturant array.
 		 */
 		private getRestaurants(): Promise<Restaurant[]> {
-			return fetch("https://akalhainen.me/ruokalistat/restaurants.json").then(
+			return fetch("https://aaroalhainen.dev/ruokalistat/restaurants.json").then(
 				function (response) {
 					return response.json();
 				}

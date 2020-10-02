@@ -113,7 +113,7 @@ export function removeFavouriteRestaurant(restaurant: Restaurant): RestaurantObj
 
 export function fetchLuchMenu(url: string, restaurant: Restaurant): Promise<any> {
     return new Promise((resolve, reject) => {
-        fetch("https://akalhainen.me/" + url)
+        fetch("https://aaroalhainen.dev/" + url)
             .then(function (response) {
                 response.json().then(menu => {
                     let data = parseRestaurantData(menu, restaurant);
