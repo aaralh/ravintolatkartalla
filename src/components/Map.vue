@@ -75,8 +75,8 @@
 					if (this.clickedRestaurant === null || this.clickedRestaurant.address !== newVal.address) {
 						let position = {
 							coords: {
-								latitude: (+newVal.location.lat - 0.006) + "",
-								longitude: newVal.location.lng,
+								latitude: +newVal.location.lat - 0.006,
+								longitude: +newVal.location.lng,
 							}
 						}
 						this.setPosition(position, 14, 0, .7);
@@ -129,7 +129,7 @@
 				document.documentElement.style.setProperty('--vh', `${vh}px`);
 			});
 
-			delete Icon.Default.prototype._getIconUrl
+			delete (Icon.Default.prototype as any)._getIconUrl
 			Icon.Default.imagePath = '/';
 			Icon.Default.mergeOptions({
 				iconRetinaUrl: require('../assets/carrot_with_shadow.png'),
@@ -201,8 +201,8 @@
 			this.clickedRestaurant = restaurant;
 			let location = {
 				coords: {
-					latitude: (+restaurant.location.lat - 0.0015) + "",
-					longitude: restaurant.location.lng,
+					latitude: +restaurant.location.lat - 0.0015,
+					longitude: +restaurant.location.lng,
 				}
 			}
 			this.setPosition(location, 16, 0).then(() => {
@@ -241,7 +241,7 @@
 		 * 
 		 * @return Promise which resolves when the animation is finished.
 		 */
-		private setPosition(position: Position | { coords: { latitude: string, longitude: string } }, zoom = 14, delay = 500, duration = 1): Promise<void> {
+		private setPosition(position: Position | { coords: { latitude: number, longitude: number } }, zoom = 14, delay = 500, duration = 1): Promise<void> {
 			return new Promise((resolve, reject) => {
 
 				setTimeout(() => {
@@ -267,7 +267,7 @@
 		 * 
 		 * @return Leaflet latLng format position.
 		 */
-		private convertLatLng(lat: number, lng: number): latLng {
+		private convertLatLng(lat: number, lng: number) {
 			return latLng(lat, lng);
 		}
 

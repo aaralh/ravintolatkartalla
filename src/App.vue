@@ -127,7 +127,7 @@
 		private keywords = "";
 		private bounds = null;
 		private mapZoom: null | number = null;
-		private showKoronaInfo = true;
+		private showKoronaInfo = false;
 
 		/**
 		 * Fetch restaurant info.
@@ -163,7 +163,7 @@
 					)
 				)
 					check = true;
-			})(navigator.userAgent || navigator.vendor || window.opera);
+			})(navigator.userAgent || navigator.vendor || (window as any).opera);
 			return check;
 		}
 
