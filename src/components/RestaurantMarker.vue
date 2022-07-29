@@ -67,7 +67,7 @@
 		 * 
 		 * @return Leaflets latLng format presentation of the given location.
 		 */
-		private convertLatLng(location: Restaurant["location"]): latLng {
+		private convertLatLng(location: Restaurant["location"]) {
 			return latLng(location.lat, location.lng);
 		}
 	}

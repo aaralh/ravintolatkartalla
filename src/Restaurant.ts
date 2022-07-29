@@ -1,6 +1,6 @@
 export interface Location {
-    lat: string,
-    lng: string,
+    lat: number,
+    lng: number,
 }
 
 export interface RestaurantObject {
