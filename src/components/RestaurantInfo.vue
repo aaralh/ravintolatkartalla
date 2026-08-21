@@ -1,6 +1,8 @@
 <template>
 	<div class="restaurant_info">
 		<div v-if="hasTime" class="restaurant_info__label__lunchtime">Lounasaika: {{ lunchTime }}</div>
+		<div v-if="menuUpdatedAt" class="restaurant_info__label__updated">Ruokalista päivitetty: {{ formatDateTime(menuUpdatedAt) }}</div>
+		<div v-if="menuDate && !isToday(menuDate)" class="restaurant_info__label__stale">Huom: ruokalista on päivältä {{ formatDate(menuDate) }}</div>
 		<div class="restaurant_info__label__title_wrap">
 			<div class="restaurant_info__label__title">{{ title }}</div>
 			<div class="restaurant_info__label__favourite" @click="handleFavourite()">
@@ -29,7 +31,7 @@
 	import { Restaurant } from '../Restaurant';
 	import Incredient from './Incredient.vue';
 	import AccordionItem from './AccordionItem.vue';
-	import { getFavouriteRestaurants, addFavouriteRestaurant, removeFavouriteRestaurant, fetchLuchMenu, FoodMenu } from "../utils";
+	import { getFavouriteRestaurants, addFavouriteRestaurant, removeFavouriteRestaurant, fetchLuchMenu, FoodMenu, formatDateTime, formatDate, isToday } from "../utils";
 
 
 
@@ -57,6 +59,9 @@
 
 		private lunchMenu: FoodMenu[] = [];
 		private lunchTime = "";
+		// Initialised to "" (not undefined) so vue-class-component makes them reactive.
+		private menuUpdatedAt = "";
+		private menuDate = "";
 		private title = "";
 		private hasMenu = true;
 		private hasTime = true;
@@ -87,6 +92,8 @@
 					this.isLoading = false;
 					this.lunchMenu = menu.lunchMenu;
 					this.lunchTime = menu.lunchTime;
+					this.menuUpdatedAt = menu.updatedAt;
+					this.menuDate = menu.menuDate;
 					this.hasMenu = menu.hasMenu;
 					this.hasTime = menu.hasTime;
 					if (menu.title) {
@@ -112,6 +119,18 @@
 			this.isFavourite = !this.isFavourite;
 		}
 
+		// Imported functions aren't reachable from the template, so expose them as methods.
+		private formatDateTime(iso: string): string {
+			return formatDateTime(iso);
+		}
+
+		private formatDate(isoDate: string): string {
+			return formatDate(isoDate);
+		}
+
+		private isToday(isoDate: string): boolean {
+			return isToday(isoDate);
+		}
 
 	}
 </script>
@@ -170,9 +189,16 @@
 				color: #7a7a7a;
 			}
 
-			&__lunchtime {
+			&__lunchtime,
+			&__updated {
 				color: #595959;
 				font-size: 10px;
+			}
+
+			&__stale {
+				color: #b35c00;
+				font-size: 10px;
+				font-weight: bold;
 			}
 		}
 		&__menu {

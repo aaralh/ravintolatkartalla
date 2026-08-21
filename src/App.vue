@@ -28,6 +28,7 @@
 							Kartta näyttää kaikki Suomen opiskelijaravintolat. Pohjadata on noudettu Kelan sivuilta ja siinä voi olla puutteita.
 							Joillakin ravintoloilla nähtävillä on myös ruokalistat ja aukioloajat (kaikista ravintoloista niitä ei ole ollut saatavilla).
 						</p>
+						<p v-if="dataUpdatedAtText" class="app__info__container__content__updated">Ravintolatiedot päivitetty: {{ dataUpdatedAtText }}</p>
 						<br />
 						<p class="bold">Mikä ihmeen opiskelijaravintolat kartalla?</p>
 						<p>
@@ -66,7 +67,7 @@
 	import { Component, Vue } from "vue-property-decorator";
 	import Map from "./components/Map.vue";
 	import { Restaurant } from "./Restaurant";
-	import { getFavouriteRestaurants } from "./utils";
+	import { getFavouriteRestaurants, fetchMeta, formatDateTime, MENUS_BASE } from "./utils";
 	import SearchBar from "./components/SearchBar.vue";
 	import RestaurantMarker from "./components/RestaurantMarker.vue";
 	import BottomPopup from "./components/BottomPopup.vue";
@@ -128,14 +129,23 @@
 		private bounds = null;
 		private mapZoom: null | number = null;
 		private showKoronaInfo = false;
+		/** ISO timestamp from meta.json; "" until loaded (or if unavailable). */
+		private dataUpdatedAt = "";
+
+		/**
+		 * "Ravintolatiedot päivitetty" text for the info panel, "" when unknown.
+		 */
+		private get dataUpdatedAtText(): string {
+			return formatDateTime(this.dataUpdatedAt);
+		}
 
 		/**
 		 * Fetch restaurant info.
-		 * 
+		 *
 		 * @return Promise of resturant array.
 		 */
 		private getRestaurants(): Promise<Restaurant[]> {
-			return fetch("https://aaroalhainen.dev/ravintolatkartalla_menus/restaurants.json").then(
+			return fetch(MENUS_BASE + "restaurants.json").then(
 				function (response) {
 					return response.json();
 				}
@@ -183,6 +193,9 @@
 		 * Vue created hook.
 		 */
 		public created(): void {
+			fetchMeta().then(updatedAt => {
+				this.dataUpdatedAt = updatedAt;
+			});
 			this.getRestaurants().then(restaurants => {
 				restaurants.forEach(restaurant => {
 					let newRestaurant = new Restaurant(
@@ -370,6 +383,8 @@
 					height: 450px;
 					max-width: 650px;
 					max-height: 100%;
+					// Scroll rather than clip if the text outgrows the fixed height.
+					overflow-y: auto;
 					@media screen and (min-width: 650px) {
 						max-height: 300px;
 					}
