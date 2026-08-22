@@ -2,6 +2,11 @@ import { Restaurant, RestaurantObject } from './Restaurant';
 
 const FAVOURITE_RESTAURANTS = "favouriteRestaurants";
 
+/** Host serving the published data; `lunchUrl` values are relative to it. */
+export const DATA_HOST = "https://aaroalhainen.dev/";
+/** Directory holding restaurants.json, meta.json and the menu_*.json files. */
+export const MENUS_BASE = DATA_HOST + "ravintolatkartalla_menus/";
+
 export interface FoodMenu {
     Price: string,
     Components: string[],
@@ -14,6 +19,10 @@ export interface MenuJson {
     hasMenu: boolean,
     hasTime: boolean,
     title: string,
+    /** ISO-8601 UTC timestamp of when the menu file was last written ("" if unknown). */
+    updatedAt: string,
+    /** "YYYY-MM-DD" the menu is for ("" if unknown). */
+    menuDate: string,
 }
 
 export function initMenuJson(): MenuJson {
@@ -23,7 +32,66 @@ export function initMenuJson(): MenuJson {
         hasMenu: true,
         hasTime: true,
         title: "",
+        updatedAt: "",
+        menuDate: "",
     }
+}
+
+function pad2(n: number): string {
+    return ("0" + n).slice(-2);
+}
+
+/** Local-time "YYYY-MM-DD" for a Date (toISOString() would give the UTC date). */
+function localDateKey(d: Date): string {
+    return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+}
+
+/**
+ * Formats an ISO-8601 timestamp in the user's local time, e.g. "21.8.2026 klo 07.23".
+ * Built by hand rather than with toLocale*String, whose fi-FI output differs between browsers.
+ *
+ * @returns Formatted string, or "" if the input is empty or unparseable.
+ */
+export function formatDateTime(iso: string): string {
+    if (!iso) {
+        return "";
+    }
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) {
+        return "";
+    }
+    return d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear()
+        + " klo " + pad2(d.getHours()) + "." + pad2(d.getMinutes());
+}
+
+/**
+ * Formats a "YYYY-MM-DD" string as "21.8.2026" without going through Date (and its timezone).
+ *
+ * @returns Formatted string, or "" if the input doesn't start with a date.
+ */
+export function formatDate(isoDate: string): string {
+    const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(isoDate || "");
+    if (!m) {
+        return "";
+    }
+    return parseInt(m[3], 10) + "." + parseInt(m[2], 10) + "." + m[1];
+}
+
+/** True if the "YYYY-MM-DD" string is today's local date. */
+export function isToday(isoDate: string): boolean {
+    return !!isoDate && isoDate.slice(0, 10) === localDateKey(new Date());
+}
+
+/**
+ * Fetches meta.json and returns the dataset's `updatedAt` timestamp.
+ *
+ * @returns ISO-8601 timestamp, or "" if the file is missing, invalid or unreachable.
+ */
+export function fetchMeta(): Promise<string> {
+    return fetch(MENUS_BASE + "meta.json")
+        .then(response => response.ok ? response.json() : null)
+        .then(meta => (meta && typeof meta.updatedAt === "string") ? meta.updatedAt : "")
+        .catch(() => "");
 }
 
 /**
@@ -113,7 +181,7 @@ export function removeFavouriteRestaurant(restaurant: Restaurant): RestaurantObj
 
 export function fetchLuchMenu(url: string, restaurant: Restaurant): Promise<any> {
     return new Promise((resolve, reject) => {
-        fetch("https://aaroalhainen.dev/" + url)
+        fetch(DATA_HOST + url)
             .then(function (response) {
                 response.json().then(menu => {
                     let data = parseRestaurantData(menu, restaurant);
@@ -161,6 +229,7 @@ function parseRestaurantData(menu: {}, restaurant: Restaurant): Promise<MenuJson
                 break;
             case "unica":
                 resolve(parseUnica(menu));
+                break;
             default:
                 resolve(initMenuJson());
         }
@@ -441,9 +510,11 @@ function parseHel(menu: any): MenuJson {
  */
 function parseUnica(menuData: any): MenuJson {
     let menuJson: MenuJson = initMenuJson();
-    let { menu, openingHours } = menuData;
+    let { menu, openingHours, updatedAt, date } = menuData;
     menuJson.lunchMenu = menu;
     menuJson.lunchTime = openingHours;
+    menuJson.updatedAt = updatedAt || "";
+    menuJson.menuDate = date || "";
     if (menuJson.lunchMenu.length === 0) {
         menuJson.hasMenu = false;
     }
