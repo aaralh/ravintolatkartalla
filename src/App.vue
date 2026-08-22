@@ -5,6 +5,11 @@
 				<img src="./assets/header.png" />
 			</div>
 		</div>
+		<p
+			v-if="dataUpdatedAtText"
+			class="app__updated"
+			:title="'Ravintolatiedot päivitetty: ' + dataUpdatedAtText"
+		>Tiedot päivitetty {{ dataUpdatedAtText }}</p>
 		<div v-if="showKoronaInfo" class="korona_info">
 			<p>
 				Koronatilanteesta johtuen ravintoloiden tiedoissa voi olla puutteita.
@@ -28,7 +33,6 @@
 							Kartta näyttää kaikki Suomen opiskelijaravintolat. Pohjadata on noudettu Kelan sivuilta ja siinä voi olla puutteita.
 							Joillakin ravintoloilla nähtävillä on myös ruokalistat ja aukioloajat (kaikista ravintoloista niitä ei ole ollut saatavilla).
 						</p>
-						<p v-if="dataUpdatedAtText" class="app__info__container__content__updated">Ravintolatiedot päivitetty: {{ dataUpdatedAtText }}</p>
 						<br />
 						<p class="bold">Mikä ihmeen opiskelijaravintolat kartalla?</p>
 						<p>
@@ -133,7 +137,7 @@
 		private dataUpdatedAt = "";
 
 		/**
-		 * "Ravintolatiedot päivitetty" text for the info panel, "" when unknown.
+		 * "Tiedot päivitetty" text shown in the bottom-left corner, "" when unknown.
 		 */
 		private get dataUpdatedAtText(): string {
 			return formatDateTime(this.dataUpdatedAt);
@@ -335,6 +339,21 @@
 					width: 100%;
 				}
 			}
+		}
+
+		// Always-visible dataset freshness stamp (from meta.json), tucked
+		// into the bottom-left corner below the search bar.
+		&__updated {
+			position: absolute;
+			bottom: 4px;
+			left: 10px;
+			margin: 0;
+			padding: 2px 5px;
+			background-color: #ffffffbf;
+			font-size: 11px;
+			line-height: 1.2;
+			color: #595959;
+			z-index: 99999;
 		}
 
 		&__info {
